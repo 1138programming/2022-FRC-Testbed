@@ -4,12 +4,18 @@
 
 package frc.robot.subsystems;
 
-// import com.ctre.phoenix.motorcontrol.can.TalonFX; //do offline install https://docs.ctre-phoenix.com/en/stable/ch05_PrepWorkstation.html
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX; //do proper offline install https://github.com/CrossTheRoadElec/Phoenix-Releases/releases/tag/v5.19.4.1
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.*;
 
 public class Base extends SubsystemBase {
   /** Creates a new Base. */
-  public Base() {}
+  private final TalonFX falcon; 
+
+  public Base() {
+    falcon = new TalonFX(KfalconPort);
+  }
 
   @Override
   public void periodic() {
@@ -19,5 +25,15 @@ public class Base extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  /**
+  * Function Moves the base directly
+  * @Category: Base
+  *  
+  * @param PWM   Speed to move the left side at
+  */
+  public void move(int PWM) {
+    falcon.set(ControlMode.PercentOutput, PWM);
   }
 }
