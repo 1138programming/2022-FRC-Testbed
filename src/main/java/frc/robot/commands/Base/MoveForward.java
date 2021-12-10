@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Base;
 
+import frc.robot.Robot;
 import frc.robot.subsystems.Base;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.ctre.phoenix.time.StopWatch;
@@ -11,44 +12,42 @@ import com.ctre.phoenix.time.StopWatch;
 /** An example command that uses an example subsystem. */
 public class MoveForward extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Base m_base;
-
+  StopWatch timer;
   /**
    * Creates a new MoveForward.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveForward(Base base) {
-    m_base = base;
+  public MoveForward() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(base);
+    addRequirements(Robot.base);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    timer = new StopWatch();
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    StopWatch timer = new StopWatch();
-    timer.start();
-    while (timer.getDuration() < 10) {
-        m_base.move(10, 10);
-    }
+    Robot.base.move(10, 10);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_base.move(0, 0);
+    Robot.base.move(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (timer.getDuration() >= 10) {
+        return true;
+    }
     return false;
   }
 }
