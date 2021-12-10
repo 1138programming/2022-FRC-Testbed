@@ -11,13 +11,31 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 public class Base extends SubsystemBase {
-
-  private TalonFX humzah;
+  //top left
+  private TalonFX humzah1;
+  //top right
+  private TalonFX humzah2;
+  //bottom left
+  private TalonFX humzah3;
+  //bottom right
+  private TalonFX humzah4;
   public Base() {
-    humzah = new TalonFX(69);
+    humzah1 = new TalonFX(69);
+    humzah2 = new TalonFX(420);
+    humzah3 = new TalonFX(21);
+    humzah4 = new TalonFX(82);
   }
   public void move(int speed) {
-    humzah.set(ControlMode.PercentOutput, speed);
+    humzah1.set(ControlMode.PercentOutput, speed);
+    humzah2.set(ControlMode.PercentOutput, -speed);
+    humzah3.set(ControlMode.PercentOutput, speed);
+    humzah4.set(ControlMode.PercentOutput, -speed);
+  }
+  public void turn(int speed) {
+    humzah1.set(ControlMode.PercentOutput, speed);
+    humzah2.set(ControlMode.PercentOutput, speed);
+    humzah3.set(ControlMode.PercentOutput, speed);
+    humzah4.set(ControlMode.PercentOutput, speed);
   }
   @Override
   public void periodic() {
