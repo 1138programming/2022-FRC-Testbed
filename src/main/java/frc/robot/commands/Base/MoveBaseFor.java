@@ -7,33 +7,49 @@ package frc.robot.commands.Base;
 import frc.robot.Robot;
 import frc.robot.subsystems.Base;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.ctre.phoenix.time.StopWatch;
 
 /** An example command that uses an example subsystem. */
-public class MoveBackward extends CommandBase {
+public class MoveBaseFor extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  StopWatch timer;
+
+  boolean direction;
+  double length;
+  double speed;
+
   /**
-   * Creates a new MoveForward.
+   * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveBackward() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public MoveBaseFor(boolean direction, double length, double speed) {
+    this.direction = direction;
+    this.length = length;
+    this.speed = speed;
+
     addRequirements(Robot.base);
   }
+
+  public MoveBaseFor() {
+    addRequirements(Robot.base);
+  }
+  
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer = new StopWatch();
-    timer.start();
+    Robot.base.zeroEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.base.move(-10, -10);
+    if (direction == false) {
+      Robot.base.move(-speed, -speed);
+    }
+    else {
+      Robot.base.move(speed, speed);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -45,9 +61,10 @@ public class MoveBackward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.getDuration() >= 10) {
-        return true;
+    if (Robot.base.getRightEncoder() >= length || Robot.base.getLeftEncoder() >= length) {
+      return true;
     }
     return false;
   }
 }
+

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Base extends SubsystemBase {
@@ -13,6 +14,9 @@ public class Base extends SubsystemBase {
         rightMotor = new TalonFX(2);
         
         rightMotor.setInverted(true);
+
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
         nonProgrammer = new TalonFX(3);
     }
@@ -30,7 +34,16 @@ public class Base extends SubsystemBase {
         rightMotor.set(ControlMode.PercentOutput, rightSpeed);
     }
 
-    public void tryToExplodeBaseMotors() {
-        leftMotor.set(ControlMode.PercentOutput, Math.random() * 1000000);
+    public double getLeftEncoder() {
+        return leftMotor.getSelectedSensorPosition();
+    }
+
+    public double getRightEncoder() {
+        return rightMotor.getSelectedSensorPosition();
+    }
+
+    public void zeroEncoders() {
+        leftMotor.setSelectedSensorPosition(0);
+        rightMotor.setSelectedSensorPosition(0);
     }
 }
