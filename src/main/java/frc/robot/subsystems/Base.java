@@ -29,26 +29,24 @@ public class Base extends SubsystemBase{
     right_Back_Turn_Motor = new TalonFX(8);
   }
 
-  public void speed(double speed){
-    left_Front_Motor.set(ControlMode.PercentOutput, speed);
-    left_Front_Turn_Motor.set(ControlMode.PercentOutput, speed);
-    left_Back_Motor.set(ControlMode.PercentOutput, speed);
-    left_Back_Turn_Motor.set(ControlMode.PercentOutput, speed);
-    right_Front_Motor.set(ControlMode.PercentOutput, speed);
-    right_Front_Turn_Motor.set(ControlMode.PercentOutput, speed);
-    right_Back_Motor.set(ControlMode.PercentOutput, speed);
-    right_Back_Turn_Motor.set(ControlMode.PercentOutput, speed);
+  public void move(double speedl, double speedr){
+    left_Front_Motor.set(ControlMode.PercentOutput, speedl);
+    left_Front_Turn_Motor.set(ControlMode.PercentOutput, speedl);
+    left_Back_Motor.set(ControlMode.PercentOutput, speedl);
+    left_Back_Turn_Motor.set(ControlMode.PercentOutput, speedl);
+    right_Front_Motor.set(ControlMode.PercentOutput, speedr);
+    right_Front_Turn_Motor.set(ControlMode.PercentOutput, speedr);
+    right_Back_Motor.set(ControlMode.PercentOutput, speedr);
+    right_Back_Turn_Motor.set(ControlMode.PercentOutput, speedr);
   }
   
   @Override
   public void periodic() {
-    Base motor_speed = new speed(v);
     // This method will be called once per scheduler run
   }
 
   @Override
   public void simulationPeriodic() {
-    new Base();
     // This method will be called once per scheduler run during simulation
   }
 }
