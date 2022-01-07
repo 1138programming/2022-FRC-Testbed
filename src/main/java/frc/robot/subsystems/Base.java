@@ -12,30 +12,30 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Base extends SubsystemBase {
   //top left
-  private TalonFX humzah1;
+  private TalonFX topLeft;
   //top right
-  private TalonFX humzah2;
+  private TalonFX topRight;
   //bottom left
-  private TalonFX humzah3;
+  private TalonFX bottomLeft;
   //bottom right
-  private TalonFX humzah4;
+  private TalonFX bottomRight;
   public Base() {
-    humzah1 = new TalonFX(69);
-    humzah2 = new TalonFX(420);
-    humzah3 = new TalonFX(21);
-    humzah4 = new TalonFX(82);
+    topLeft = new TalonFX(69);
+    topRight = new TalonFX(420);
+    bottomLeft = new TalonFX(21);
+    bottomRight = new TalonFX(82);
   }
   public void move(int speed) {
-    humzah1.set(ControlMode.PercentOutput, speed);
-    humzah2.set(ControlMode.PercentOutput, -speed);
-    humzah3.set(ControlMode.PercentOutput, speed);
-    humzah4.set(ControlMode.PercentOutput, -speed);
+    topLeft.set(ControlMode.PercentOutput, speed);
+    topRight.set(ControlMode.PercentOutput, -speed);
+    bottomLeft.set(ControlMode.PercentOutput, speed);
+    bottomRight.set(ControlMode.PercentOutput, -speed);
   }
   public void turn(int speed) {
-    humzah1.set(ControlMode.PercentOutput, speed);
-    humzah2.set(ControlMode.PercentOutput, speed);
-    humzah3.set(ControlMode.PercentOutput, speed);
-    humzah4.set(ControlMode.PercentOutput, speed);
+    topLeft.set(ControlMode.PercentOutput, speed);
+    topRight.set(ControlMode.PercentOutput, speed);
+    bottomLeft.set(ControlMode.PercentOutput, speed);
+    bottomRight.set(ControlMode.PercentOutput, speed);
   }
   @Override
   public void periodic() {
