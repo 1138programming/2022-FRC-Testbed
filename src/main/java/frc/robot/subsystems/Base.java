@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 
 public class Base extends SubsystemBase {
@@ -21,9 +21,13 @@ public class Base extends SubsystemBase {
   private TalonFX bottomRight;
   public Base() {
     topLeft = new TalonFX(69);
+    topLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 500);
     topRight = new TalonFX(420);
+    topRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 500);
     bottomLeft = new TalonFX(21);
+    bottomLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 500);
     bottomRight = new TalonFX(82);
+    bottomRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 500);
   }
   public void move(int speed) {
     topLeft.set(ControlMode.PercentOutput, speed);
