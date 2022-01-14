@@ -19,6 +19,8 @@ public class Base extends SubsystemBase {
   private TalonFX bottomLeft;
   //bottom right
   private TalonFX bottomRight;
+
+  private double value;
   public Base() {
     topLeft = new TalonFX(69);
     topLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 500);
@@ -40,6 +42,16 @@ public class Base extends SubsystemBase {
     topRight.set(ControlMode.PercentOutput, speed);
     bottomLeft.set(ControlMode.PercentOutput, speed);
     bottomRight.set(ControlMode.PercentOutput, speed);
+  }
+  public void zeroEncoders() {
+    topLeft.setSelectedSensorPosition(0,0,0);
+    topRight.setSelectedSensorPosition(0,0,0);
+    bottomLeft.setSelectedSensorPosition(0,0,0);
+    bottomRight.setSelectedSensorPosition(0,0,0);
+  }
+  public double getEncoders() {
+    value = (topLeft.getSelectedSensorPosition() + -topRight.getSelectedSensorPosition() + bottomLeft.getSelectedSensorPosition() + -bottomRight.getSelectedSensorPosition())/4;
+    return value;
   }
   @Override
   public void periodic() {

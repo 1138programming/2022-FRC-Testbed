@@ -2,17 +2,14 @@ package frc.robot.commands.Base;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Base;
-import edu.wpi.first.hal.sim.EncoderSim;
 
 public class moveEncoder extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final Timer timer;
-    private double time;
+    private double distance;
     private int speed;
 
-    public moveEncoder(int speed, double time) {
-      timer = new Timer();
-      this.time = time;
+    public moveEncoder(int speed, double distance) {
+      this.distance = distance;
       this.speed = speed;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(Robot.base);
@@ -20,8 +17,8 @@ public class moveEncoder extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      timer.start();
       Robot.base.move(speed);
+      Robot.base.zeroEncoders();
     }
   
     // Called every time the scheduler runs while the command is scheduled.
@@ -35,9 +32,7 @@ public class moveEncoder extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      if (timer.hasElapsed(time)) {
-        timer.stop();
-        timer.reset();
+      if (Math.abs(Robot.base.getEncoders()) >= Math.abs(distance)) {
         Robot.base.move(0);
         return true;
       }
