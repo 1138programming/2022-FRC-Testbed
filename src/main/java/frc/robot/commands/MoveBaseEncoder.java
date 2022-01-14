@@ -2,42 +2,64 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Base;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Robot;
+import frc.robot.subsystems.Base;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
+public class MoveBaseEncoder extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
-
+  
+  boolean direction;
+  double length;
+  double speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+  public MoveBaseEncoder(boolean direction, double length, double speed) {
+    this.direction = direction;
+    this.length = length;
+    this.speed = speed;
+
+    addRequirements(Robot.base);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    Robot.base.zeroEncoders();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (direction == false)
+    {
+      Robot.base.move(-speed, -speed);
+    }
+    else 
+    {
+      Robot.base.move(speed, speed);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Robot.base.move(0,0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Robot.base.getRightEncoder() >= length || Robot.base.getLeftEncoder() >= length)
+    {
+      return true;
+    }
     return false;
   }
 }
