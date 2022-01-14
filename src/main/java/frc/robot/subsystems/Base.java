@@ -7,43 +7,51 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Base extends SubsystemBase {
-    private TalonFX leftMotor, rightMotor, nonProgrammer;
+    private TalonFX leftBackMotor, leftMidMotor, leftFrontMotor, rightBackMotor, rightMidMotor, rightFrontMotor;
 
     public Base() {
-        leftMotor = new TalonFX(1);
-        rightMotor = new TalonFX(2);
+        leftBackMotor = new TalonFX(1);
+        leftMidMotor = new TalonFX(2);
+        leftFrontMotor = new TalonFX(3);
+
+        rightBackMotor = new TalonFX(4);
+        rightMidMotor = new TalonFX(5);
+        rightFrontMotor = new TalonFX(6);
         
-        rightMotor.setInverted(true);
+        rightBackMotor.setInverted(true);
+        rightMidMotor.follow(rightBackMotor);
+        rightFrontMotor.follow(rightBackMotor);
 
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftMidMotor.follow(leftBackMotor);
+        leftFrontMotor.follow(leftBackMotor);
 
-        nonProgrammer = new TalonFX(3);
+        rightBackMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftBackMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     }
 
     @Override
     public void periodic() {
-        nonProgrammer.DestroyObject();
+        
     }
   
     @Override
     public void simulationPeriodic() { }
 
     public void move(double leftSpeed, double rightSpeed) {
-        leftMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightMotor.set(ControlMode.PercentOutput, rightSpeed);
+        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed);
+        rightBackMotor.set(ControlMode.PercentOutput, rightSpeed);
     }
 
     public double getLeftEncoder() {
-        return leftMotor.getSelectedSensorPosition();
+        return leftBackMotor.getSelectedSensorPosition();
     }
 
     public double getRightEncoder() {
-        return rightMotor.getSelectedSensorPosition();
+        return rightBackMotor.getSelectedSensorPosition();
     }
 
     public void zeroEncoders() {
-        leftMotor.setSelectedSensorPosition(0);
-        rightMotor.setSelectedSensorPosition(0);
+        leftBackMotor.setSelectedSensorPosition(0);
+        rightBackMotor.setSelectedSensorPosition(0);
     }
 }
