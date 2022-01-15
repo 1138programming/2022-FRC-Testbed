@@ -32,6 +32,7 @@ public class MoveTest extends CommandBase {
   @Override
   public void execute() {
     Robot.testbed.move(Robot.m_robotContainer.getXboxLeftYAxis(), Robot.m_robotContainer.getXboxRightYAxis());
+    Robot.testbed.move2(Robot.m_robotContainer.getXboxLeftXAxis());
   }
 
   // Called once the command ends or is interrupted.
