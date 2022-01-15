@@ -5,19 +5,20 @@
 package frc.robot.subsystems;
 import static frc.robot.Constants.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestBed extends SubsystemBase {
-    private TalonFX left;
-    private TalonFX right;
-    private TalonFX unused;
+    private TalonSRX left;
+    private TalonSRX right;
+    private TalonSRX unused;
 
   /** Creates a new ExampleSubsystem. */
   public TestBed() {
-      right = new TalonFX(KRightPort);
-      left = new TalonFX(KLeftPort);
-      unused = new TalonFX(KUnused);
+      right = new TalonSRX(KRightPort);
+      left = new TalonSRX(KLeftPort);
+      unused = new TalonSRX(KUnused);
     right.setInverted(true);
     
   }

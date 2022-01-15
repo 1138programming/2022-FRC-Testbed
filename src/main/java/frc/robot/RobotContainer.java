@@ -23,12 +23,14 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   public static XboxController xbox;
   private static final int KLeftYAxis = 1;
-  private static final int KRightYAxis = 3;
+  private static final int KRightYAxis = 5;
   private static final int KLeftXAxis = 0;
-  private static final int KRightXAxis = 2;
+  private static final int KRightXAxis = 4;
+  private static final int KXboxUSBPort = 1;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    xbox = new XboxController(KXboxUSBPort);
     // Configure the button bindings
     configureButtonBindings();
     
