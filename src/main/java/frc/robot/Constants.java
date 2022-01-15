@@ -15,7 +15,7 @@ package frc.robot;
 public final class Constants {
     public static final int KRightPort = 10; 
     public static final int KLeftPort = 11;
-    public static final int KUnused = 12;
+    public static final int KMiddlePort = 12;
     public static final double KDeadZone = 0.05;
 
 }

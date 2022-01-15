@@ -9,16 +9,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class TestBed extends SubsystemBase {
+public class Hang extends SubsystemBase {
     private TalonSRX left;
     private TalonSRX right;
-    private TalonSRX unused;
+    private TalonSRX middle;
 
   /** Creates a new ExampleSubsystem. */
-  public TestBed() {
+  public Hang() {
       right = new TalonSRX(KRightPort);
       left = new TalonSRX(KLeftPort);
-      unused = new TalonSRX(KUnused);
+      middle = new TalonSRX(KMiddlePort);
     right.setInverted(true);
     
   }
@@ -26,8 +26,8 @@ public class TestBed extends SubsystemBase {
     left.set(ControlMode.PercentOutput, leftSpeed);
     right.set(ControlMode.PercentOutput, rightSpeed);
    }
-   public void move2(double unusedSpeed){
-       unused.set(ControlMode.PercentOutput, unusedSpeed);
+   public void move2(double middleSpeed){
+       middle.set(ControlMode.PercentOutput, middleSpeed);
    }
   @Override
   public void periodic() {
