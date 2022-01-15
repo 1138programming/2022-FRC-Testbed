@@ -31,8 +31,8 @@ public class MoveTest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.testbed.move(Robot.m_robotContainer.getXboxRightYAxis(), Robot.m_robotContainer.getXboxRightYAxis());
-    Robot.testbed.move2(Robot.m_robotContainer.getXboxRightYAxis());
+    Robot.testbed.move(Robot.m_robotContainer.getXboxLeftYAxis(), Robot.m_robotContainer.getXboxRightYAxis());
+    Robot.testbed.move2(Robot.m_robotContainer.getXboxLeftXAxis());
   }
 
   // Called once the command ends or is interrupted.
