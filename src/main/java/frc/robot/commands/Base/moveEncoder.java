@@ -27,13 +27,14 @@ public class moveEncoder extends CommandBase {
   
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+      Robot.base.move(0);
+    }
   
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
       if (Math.abs(Robot.base.getEncoders()) >= Math.abs(distance)) {
-        Robot.base.move(0);
         return true;
       }
       else {
