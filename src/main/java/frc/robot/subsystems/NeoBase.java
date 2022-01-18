@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.*;
 import frc.robot.Gains;
 
-import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -24,8 +23,8 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 import com.revrobotics.RelativeEncoder;
@@ -33,6 +32,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.AngleStatistics;
 
 
 
@@ -44,14 +44,9 @@ public class NeoBase extends SubsystemBase {
 
   private ServeX[] modules;
 
-  private PIDController driveController, angleController;
-
   private double KAbsoluteResetPoint = 69;
 
   public NeoBase() {
-
-    driveController = new PIDController(kDriveP, kDriveI, kDriveD);
-    angleController = new PIDController(kAngleP, kAngleI, kAngleD);
 
 
     kinematics = new SwerveDriveKinematics(
@@ -75,11 +70,11 @@ public class NeoBase extends SubsystemBase {
 
   modules = new ServeX[] {
     
-    new ServeX(new CANSparkMax(frontLeftDriveId, MotorType.kBrushless), new CANSparkMax(frontLeftSteerId, MotorType.kBrushless), new CANifier(frontLeftCANifierId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
-    new ServeX(new CANSparkMax(frontRightDriveId, MotorType.kBrushless), new CANSparkMax(frontRightSteerId, MotorType.kBrushless), new CANifier(frontRightCANifierId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
-    new ServeX(new CANSparkMax(backLeftDriveId, MotorType.kBrushless), new CANSparkMax(backLeftSteerId, MotorType.kBrushless), new CANifier(backLeftCANifierId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
-    new ServeX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new CANifier(backRightCANifierId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
-
+    new ServeX(new CANSparkMax(frontLeftDriveId, MotorType.kBrushless), new CANSparkMax(frontLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontLeftCANifierId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
+    new ServeX(new CANSparkMax(frontRightDriveId, MotorType.kBrushless), new CANSparkMax(frontRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontRightCANifierId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
+    new ServeX(new CANSparkMax(backLeftDriveId, MotorType.kBrushless), new CANSparkMax(backLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(backLeftCANifierId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
+    new ServeX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(backRightCANifierId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
+//ur mom
   };
 
   SmartDashboard.putNumber("Base kP", 0.0);
@@ -116,15 +111,15 @@ public class NeoBase extends SubsystemBase {
   //   //below is a line to comment out from step 5
   //   module.setDesiredState(state);
   // }
-  for (int i = 0; i < states.length; i = i + 2) {
-    ServeX module = modules[i];
-    SwerveModuleState state = states[i];
-    //below is a line to comment out from step 5
-    module.setDesiredState(state);
-  }
+  // for (int i = 0; i < states.length; i = i++) {
+  //   ServeX module = modules[i];
+  //   SwerveModuleState state = states[i];
+  //   //below is a line to comment out from step 5
+  //   module.setDesiredState(state);
+  // }
 
-  // ServeX module = modules[0];
-  // SwerveModuleState state = states[0];
+  // ServeX module = modules[1];
+  // SwerveModuleState state = states[1];
   // module.setDesiredState(state);
 
 
@@ -135,23 +130,11 @@ public class NeoBase extends SubsystemBase {
     gyro.reset(); //recalibrates gyro offset
   }
 
-  //DOESNT WORK!!
-  public void resetAllAngleENcoders(){
-//fake code
-  }
-
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Front Raw Angle", modules[0].getRawAngle());
-    SmartDashboard.putNumber("Right Front Raw Angle", modules[1].getRawAngle());
-    SmartDashboard.putNumber("Left Back Raw Angle", modules[2].getRawAngle());
-    SmartDashboard.putNumber("Right Back Raw Angle", modules[3].getRawAngle());
-    SmartDashboard.putNumber("Desired Ticks", modules[3].getDesiredTicks());
+    SmartDashboard.putNumber("Rght Front Absolute Angle", modules[1].getAbsoluteTicks());
 
     // setModuleGains(SmartDashboard.getNumber("Base kP", 0.0), SmartDashboard.getNumber("Base kI", 0.0), SmartDashboard.getNumber("Base kD", 0.0));
-
-    SmartDashboard.putNumber("Current Tick", modules[3].getCurrentTicks());
-    //SmartDashboard.putNumber("SetPoint", modules[3].getSetpoint());
     // This method will be called once per scheduler run
   }
 
@@ -167,13 +150,16 @@ public class NeoBase extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public class ServeX {
+  class ServeX {
 
     private  double maxDeltaTicks = 980.0;
 
     private  final Gains kDriveGains = new Gains(15, 0.01, 0.1, 0.2, 0, 1.0);
 
     private final Gains kAngleGains = new Gains(0.6, 0.0, 0.25, 0.0, 0, 1.0);
+    
+    private PIDController driveController, angleController;
+
 
     // CANCoder has 4096 ticks/rotation
     private double kEncoderTicksPerRotation = 4096;
@@ -182,23 +168,27 @@ public class NeoBase extends SubsystemBase {
 
     private CANSparkMax driveMotor;
     private CANSparkMax angleMotor;
-    private CANifier canifier;
+    private DutyCycleEncoder magEncoder;
     private Rotation2d offset;
     private RelativeEncoder angleEncoder, driveEncoder;
-    //private Boolean invert;
+    private int kCANifierPWMChannel;
+    private double[] pulseWidthAndPeriod = new double[]{1, 1/244}; //pulse width found in mag encoder manual pdf, period is 1/frequency (also found in pdf)
 
-    ServeX(CANSparkMax driveMotor, CANSparkMax angleMotor, CANifier canifier, Rotation2d offset) {
+    ServeX(CANSparkMax driveMotor, CANSparkMax angleMotor, DutyCycleEncoder magEncoder, Rotation2d offset) {
       this.driveMotor = driveMotor;
       this.angleMotor = angleMotor;
-      this.canifier = canifier;
+      this.magEncoder = magEncoder;
+      this.kCANifierPWMChannel = kCANifierPWMChannel;
       this.offset = offset;
 
       angleEncoder = angleMotor.getEncoder(); // check ticks per revolution with neos
       driveEncoder = driveMotor.getEncoder(); // check ticks per revolution with neos
 
       //this.invert = invert;
+      //PIDControllers:
+      driveController = new PIDController(kDriveP, kDriveI, kDriveD);
+      angleController = new PIDController(kAngleP, kAngleI, kAngleD);
 
-      
 
       //angleMotor.configAllowableClosedloopError(0, 0, 0);
 
@@ -230,7 +220,8 @@ public class NeoBase extends SubsystemBase {
      * @return The relative rotational position of the angle motor in degrees
      */
     public Rotation2d getAngle() {
-      double deg = (canifier.getQuadraturePosition() % ticksPerRevolution) * 360 / ticksPerRevolution;
+      double deg = (angleEncoder.getPosition() % 1) * 360; //getPosition returns rotations (e.g. 5.25 rotations), so modulo 1 gets remainder (0.25), * 360 to get degrees
+      //double deg = (canifier.getQuadraturePosition() % ticksPerRevolution) * 360 / ticksPerRevolution;
       //double deg = canifier.getQuadraturePosition() * 360.0 / 4096.0;
       if (deg < 0){
         deg = deg +360;
@@ -244,7 +235,8 @@ public class NeoBase extends SubsystemBase {
     public double getRawAngle() {
       //double deg = canifier.getQuadraturePosition() * 360.0 / 4096.0;
 
-      double deg = (canifier.getQuadraturePosition() % ticksPerRevolution) * 360 / ticksPerRevolution;
+      double deg = (angleEncoder.getPosition() % 1) * 360;
+    //   double deg = (canifier.getQuadraturePosition() % ticksPerRevolution) * 360 / ticksPerRevolution;
       if (deg < 0){
         deg = deg + 360;
       }
@@ -257,16 +249,21 @@ public class NeoBase extends SubsystemBase {
     }
 
     public double getCurrentTicks() {
-      return canifier.getQuadraturePosition();
+      return angleEncoder.getPosition() * ticksPerRevolution;
+    //   return canifier.getQuadraturePosition();
     }
 
     public double getDesiredTicks() {
       return desiredTicks;
     }
 
+    public double getAbsoluteTicks(){
+      return magEncoder.get() * ticksPerRevolution;
+    }
+
     public void resetEncoders() {
-      // angleEncoder.setPosition(KAbsoluteResetPoint - canifier.getPWMInput(pwmChannel, pulseWidthAndPeriod);
-      canifier.setQuadraturePosition(0, 0);
+      angleEncoder.setPosition(KAbsoluteResetPoint - magEncoder.get()); //all units in rotations, Need to get mag encoder PWN output from Rio for absolute reading
+    //   canifier.setQuadraturePosition(KAbsoluteResetPoint - canifier.getPWMInput(kCANifierPWMChannel, pulseWidthAndPeriod); //Need to get PWN output from canifier into Rio for absolute reading
     }
     //:)
     /**
@@ -284,8 +281,8 @@ public class NeoBase extends SubsystemBase {
       // Find the new absolute position of the module based on the difference in rotation
       double deltaTicks = (rotationDelta.getDegrees() / 360) * kEncoderTicksPerRotation;
       // Convert the CANCoder from it's position reading back to ticks
-      double currentTicks = canifier.getQuadraturePosition();
-
+      // double currentTicks = canifier.getQuadraturePosition();
+      
       desiredTicks = deltaTicks;
 
       if (desiredTicks > maxDeltaTicks) {
@@ -294,13 +291,11 @@ public class NeoBase extends SubsystemBase {
         desiredTicks = -maxDeltaTicks;
       }
 
-      //below is a line to comment out from step 5
       angleMotor.set(angleController.calculate(angleEncoder.getPosition(), desiredTicks));
 
       double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond)/2;
 
-      //below is a line to comment out from step 5
-      driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), feetPerSecond / kMaxSpeed));
+      // driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), feetPerSecond / kMaxSpeed));
     }
 
     public void setAnglePIDGains(double kP, double kI, double kD){

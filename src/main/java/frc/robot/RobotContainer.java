@@ -6,9 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import frc.robot.commands.Base.DriveWithJoysticks;
+import frc.robot.commands.Hang.HangStop;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,8 +27,49 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private static final int KLogitechDrive = 0;
+  private static final int KXboxArms = 1;  
+
+  //Deadzone
+  private static final double KDeadZone = 0.05;
+
+  //Logitech Button Constants
+  public static final int KLogitechButtonX = 1;
+  public static final int KLogitechButtonA = 2;
+  public static final int KLogitechButtonB = 3;
+  public static final int KLogitechButtonY = 4;
+  public static final int KLogitechLeftBumper = 5; 
+  public static final int KLogitechRightBumper = 6;
+  public static final int KLogitechLeftTrigger = 7;
+  public static final int KLogitechRightTrigger = 8;
+
+  private static final int KLeftYAxis = 1;
+  private static final int KRightYAxis = 3;
+  private static final int KLeftXAxis = 0;
+  private static final int KRightXAxis = 2;
+
+  //Xbox Button Constants
+  public static final int KXboxButtonA = 1; 
+  public static final int KXboxButtonB = 2;
+  public static final int KXboxButtonX = 3;  
+  public static final int KXboxButtonY = 4; 
+  public static final int KXboxLeftBumper = 5; 
+  public static final int KXboxRightBumper = 6; 
+  public static final int KXboxSelectButton = 7; 
+  public static final int KXboxStartButton = 8; 
+  public static final int KXboxLeftTrigger = 9; 
+  public static final int KXboxRightTrigger = 10; 
+
+  public static Joystick logitech;
+  public static XboxController xbox; 
+  public JoystickButton logitechBtnX, logitechBtnA, logitechBtnB, logitechBtnY, logitechBtnLB, logitechBtnRB, logitechBtnLT, logitechBtnRT; //Logitech Button
+  public JoystickButton xboxBtnA, xboxBtnB, xboxBtnX, xboxBtnY, xboxBtnLB, xboxBtnRB, xboxBtnStrt, xboxBtnSelect, xboxBtnLT, xboxBtnRT;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Robot.base.setDefaultCommand(new DriveWithJoysticks());
+    Robot.hang.setDefaultCommand(new HangStop());
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -44,5 +90,79 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+  public double getLogiRightYAxis() {
+    final double Y = logitech.getRawAxis(KRightYAxis);
+    if (Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else
+      return 0;
+  }
+
+  public double getLogiLeftYAxis() {
+    final double Y = logitech.getRawAxis(KLeftYAxis);
+    if(Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else 
+      return 0; 
+  }
+
+  public double getLogiRightXAxis() {
+    double X = logitech.getRawAxis(KRightXAxis);
+    if (X > KDeadZone || X < -KDeadZone) {
+      return -X;
+    } else {
+      return 0; 
+    }
+  }
+
+  public double getLogiLeftXAxis() {
+    double X = logitech.getRawAxis(KLeftXAxis);
+    if (X > KDeadZone || X < -KDeadZone) {
+      return -X;
+    } else {
+      return 0;
+    }
+  }
+
+  public double getXboxLeftAxis() {
+    final double Y = xbox.getRawAxis(KLeftYAxis);
+    if(Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else 
+      return 0;
+  }
+
+  public double getXboxLeftXAxis() {
+    final double X = xbox.getRawAxis(KRightXAxis);
+    if(X > KDeadZone || X < -KDeadZone)
+      return X;
+    else 
+      return 0;
+  }
+
+  public double getXboxRightXAxis() {
+    final double X = xbox.getRawAxis(KRightXAxis);
+    if (X > KDeadZone || X < -KDeadZone)
+      return -X;
+    else
+      return 0;
+  }
+
+  public double getXboxLeftYAxis() {
+    final double Y = xbox.getRawAxis(KLeftYAxis);
+    if(Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else 
+      return 0;
+  }
+
+  public double getXboxRightYAxis() {
+    final double Y = xbox.getRawAxis(KRightYAxis);
+    if (Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else
+      return 0;
   }
 }

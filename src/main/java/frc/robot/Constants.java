@@ -28,28 +28,23 @@ public final class Constants {
     public static final int backLeftSteerId = 3;
     public static final int backRightDriveId = 1; 
     public static final int backRightCANifierId = 12; 
-    public static final int backRightSteerId = 4; 
-
-    //FLywheel
-    public static final int KFlywheelTopTalon = 2;      //confirmed
-    public static final int KFlywheelBottomTalon = 10;   //confirmed
-
-    //Funnel
-    public static final int KFunnelSpark = 3;       //confirmed
+    public static final int backRightSteerId = 4;
 
     //Storage
-    public static final int KStorageFrontSpark = 2; //confirmed
-    public static final int KStorageBackSpark = 1;  //confirmed
-    public static final int KBallSensor1 = 1;       //confirmed
-    //public static final int KBallSensor2 = 14;
+    public static final int KStorageSpark = 1;
+
+    //Shooter
+    public static final int KShooterSpark = 2;
 
     //Intake
     public static final int KIntakeSpark = 0;
 
+    //Hang
+    public static final int KLeftHangMotor = 3;
+    public static final int KRightHangMotor = 4;
+    public static final int KMiddleHangMotor = 5;
+
 // Default PWM Values
-    //Funnel
-    public static final double KFunnelPWM = 0.6;
-    public static final double KStoragePWM = 0.7;
 
     //Intake
     public static final double KIntakePWM = 1;
