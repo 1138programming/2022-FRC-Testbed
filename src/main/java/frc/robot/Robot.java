@@ -5,10 +5,10 @@
 package frc.robot;
 
 import frc.robot.subsystems.NeoBase;
-import frc.robot.subsystems.Hang;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Storage;
-import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Hang;
+// import frc.robot.subsystems.Shooter;
+// import frc.robot.subsystems.Storage;
+// import frc.robot.subsystems.Intake;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -27,10 +27,10 @@ public class Robot extends TimedRobot {
   public static RobotContainer robotContainer;
 
   public static NeoBase base;
-  public static Hang hang;
-  public static Shooter shooter;
-  public static Storage storage;
-  public static Intake intake;
+  // public static Hang hang;
+  // public static Shooter shooter;
+  // public static Storage storage;
+  // public static Intake intake;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,12 +41,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
-
-    base = new NeoBase();
-    hang = new Hang();
-    shooter = new Shooter();
-    storage = new Storage();
-    intake = new Intake();
   }
 
   /**

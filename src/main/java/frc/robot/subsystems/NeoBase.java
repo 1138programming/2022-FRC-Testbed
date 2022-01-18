@@ -70,11 +70,10 @@ public class NeoBase extends SubsystemBase {
 
   modules = new ServeX[] {
     
-    new ServeX(new CANSparkMax(frontLeftDriveId, MotorType.kBrushless), new CANSparkMax(frontLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontLeftCANifierId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
+    // new ServeX(new CANSparkMax(frontLeftDriveId, MotorType.kBrushless), new CANSparkMax(frontLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontLeftCANifierId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
     new ServeX(new CANSparkMax(frontRightDriveId, MotorType.kBrushless), new CANSparkMax(frontRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontRightCANifierId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
-    new ServeX(new CANSparkMax(backLeftDriveId, MotorType.kBrushless), new CANSparkMax(backLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(backLeftCANifierId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
-    new ServeX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(backRightCANifierId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
-//ur mom
+    // new ServeX(new CANSparkMax(backLeftDriveId, MotorType.kBrushless), new CANSparkMax(backLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(backLeftCANifierId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
+    // new ServeX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(backRightCANifierId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
   };
 
   SmartDashboard.putNumber("Base kP", 0.0);
@@ -118,9 +117,9 @@ public class NeoBase extends SubsystemBase {
   //   module.setDesiredState(state);
   // }
 
-  // ServeX module = modules[1];
-  // SwerveModuleState state = states[1];
-  // module.setDesiredState(state);
+  ServeX module = modules[0];
+  SwerveModuleState state = states[0];
+  module.setDesiredState(state);
 
 
     //SmartDashboard.putNumber("gyro Angle", gyro.getAngle());
@@ -132,7 +131,7 @@ public class NeoBase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Rght Front Absolute Angle", modules[1].getAbsoluteTicks());
+    SmartDashboard.putNumber("Rght Front Absolute Angle", modules[0].getAbsoluteTicks());
 
     // setModuleGains(SmartDashboard.getNumber("Base kP", 0.0), SmartDashboard.getNumber("Base kI", 0.0), SmartDashboard.getNumber("Base kD", 0.0));
     // This method will be called once per scheduler run
@@ -171,14 +170,12 @@ public class NeoBase extends SubsystemBase {
     private DutyCycleEncoder magEncoder;
     private Rotation2d offset;
     private RelativeEncoder angleEncoder, driveEncoder;
-    private int kCANifierPWMChannel;
     private double[] pulseWidthAndPeriod = new double[]{1, 1/244}; //pulse width found in mag encoder manual pdf, period is 1/frequency (also found in pdf)
 
     ServeX(CANSparkMax driveMotor, CANSparkMax angleMotor, DutyCycleEncoder magEncoder, Rotation2d offset) {
       this.driveMotor = driveMotor;
       this.angleMotor = angleMotor;
       this.magEncoder = magEncoder;
-      this.kCANifierPWMChannel = kCANifierPWMChannel;
       this.offset = offset;
 
       angleEncoder = angleMotor.getEncoder(); // check ticks per revolution with neos
@@ -258,12 +255,12 @@ public class NeoBase extends SubsystemBase {
     }
 
     public double getAbsoluteTicks(){
-      return magEncoder.get() * ticksPerRevolution;
+      return (magEncoder.get() % 1 ) * ticksPerRevolution;
     }
 
     public void resetEncoders() {
       angleEncoder.setPosition(KAbsoluteResetPoint - magEncoder.get()); //all units in rotations, Need to get mag encoder PWN output from Rio for absolute reading
-    //   canifier.setQuadraturePosition(KAbsoluteResetPoint - canifier.getPWMInput(kCANifierPWMChannel, pulseWidthAndPeriod); //Need to get PWN output from canifier into Rio for absolute reading
+    //   canifier.setQuadraturePosition(KAbsoluteResetPoint - canifier.getPWMInput(magEncoder, pulseWidthAndPeriod); //Need to get PWN output from canifier into Rio for absolute reading
     }
     //:)
     /**
@@ -291,7 +288,7 @@ public class NeoBase extends SubsystemBase {
         desiredTicks = -maxDeltaTicks;
       }
 
-      angleMotor.set(angleController.calculate(angleEncoder.getPosition(), desiredTicks));
+      // angleMotor.set(angleController.calculate(angleEncoder.getPosition(), desiredTicks));
 
       double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond)/2;
 

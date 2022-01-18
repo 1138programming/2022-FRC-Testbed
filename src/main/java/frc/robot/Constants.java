@@ -17,32 +17,32 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     // Motors IDs
     //Base
-    public static final int frontLeftDriveId = 9; 
-    public static final int frontLeftCANifierId = 9; 
-    public static final int frontLeftSteerId = 8;
+    // public static final int frontLeftDriveId = 1; 
+    public static final int frontLeftCANifierId = 2; 
+    // public static final int frontLeftSteerId = 8;
     public static final int frontRightDriveId = 7; 
-    public static final int frontRightCANifierId = 11; 
+    public static final int frontRightCANifierId = 0; 
     public static final int frontRightSteerId = 5; 
-    public static final int backLeftDriveId = 6; 
+    // public static final int backLeftDriveId = 6; 
     public static final int backLeftCANifierId = 10; 
-    public static final int backLeftSteerId = 3;
-    public static final int backRightDriveId = 1; 
+    // public static final int backLeftSteerId = 3;
+    // public static final int backRightDriveId = 9; 
     public static final int backRightCANifierId = 12; 
-    public static final int backRightSteerId = 4;
+    // public static final int backRightSteerId = 4;
 
     //Storage
-    public static final int KStorageSpark = 1;
+    public static final int KStorageSpark = 18;
 
     //Shooter
-    public static final int KShooterSpark = 2;
+    public static final int KShooterSpark = 14;
 
     //Intake
-    public static final int KIntakeSpark = 0;
+    public static final int KIntakeSpark = 9;
 
     //Hang
-    public static final int KLeftHangMotor = 3;
-    public static final int KRightHangMotor = 4;
-    public static final int KMiddleHangMotor = 5;
+    public static final int KLeftHangMotor = 15;
+    public static final int KRightHangMotor = 17;
+    public static final int KMiddleHangMotor = 19;
 
 // Default PWM Values
 

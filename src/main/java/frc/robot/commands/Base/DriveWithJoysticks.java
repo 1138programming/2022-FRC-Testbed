@@ -5,28 +5,32 @@
 package frc.robot.commands.Base;
 
 import frc.robot.Robot;
-
+import frc.robot.subsystems.NeoBase;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoysticks extends CommandBase {
+
+  private final NeoBase base;
+
   private double xSpeed;
   private double ySpeed;
   private double rot;
 
-  private final SlewRateLimiter xSpeedLimiter;
-  private final SlewRateLimiter ySpeedLimiter;
-  private final SlewRateLimiter rotLimiter;
-
-
+  private SlewRateLimiter xSpeedLimiter;
+  private SlewRateLimiter ySpeedLimiter;
+  private SlewRateLimiter rotLimiter;
 
   /** Creates a new DriveWithJoysticks. */
-  public DriveWithJoysticks() {
-    addRequirements(Robot.base);
-    
+  public DriveWithJoysticks(NeoBase base) {
+
+    this.base = base;
+  
     xSpeedLimiter = new SlewRateLimiter(6);
     ySpeedLimiter = new SlewRateLimiter(6);
     rotLimiter = new SlewRateLimiter(6);
+
+    addRequirements(base);
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +46,7 @@ public class DriveWithJoysticks extends CommandBase {
 
     rot = rotLimiter.calculate(Robot.robotContainer.getLogiRightXAxis());
     
-    Robot.base.drive(xSpeed, ySpeed, rot, true);
+    base.drive(xSpeed, ySpeed, rot, true);
   }
 
   // Called once the command ends or is interrupted.
