@@ -12,6 +12,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NeoBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LinearActuator;
 import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.Base.DriveWithJoysticks;
 // import frc.robot.commands.Hang.HangStop;
 // import frc.robot.commands.Intake.IntakeStop;
+import frc.robot.commands.LinearActuator.LinearActuatorOut;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,6 +33,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final NeoBase base  = new NeoBase();
+  private final LinearActuator linearActuator = new LinearActuator();
   // private final Hang hang = new Hang();
   // private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
@@ -38,6 +41,7 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
+  private final LinearActuatorOut linearActuatorOut = new LinearActuatorOut(linearActuator);
   // private final HangStop hangStop = new HangStop(hang);
   // private final IntakeStop intakeStop = new IntakeStop(intake);
 
@@ -82,6 +86,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     base.setDefaultCommand(driveWithJoysticks);
+    linearActuator.setDefaultCommand(linearActuatorOut);
     // hang.setDefaultCommand(hangStop);
 
     logitech = new Joystick(KLogitechPort);

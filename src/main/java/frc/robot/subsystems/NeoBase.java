@@ -255,7 +255,7 @@ public class NeoBase extends SubsystemBase {
     }
 
     public double getAbsoluteTicks(){
-      return (magEncoder.get() % 1 ) * ticksPerRevolution;
+      return (magEncoder.get() % 1) * ticksPerRevolution;
     }
 
     public void resetEncoders() {
