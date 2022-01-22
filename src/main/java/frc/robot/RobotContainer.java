@@ -18,8 +18,9 @@ import frc.robot.subsystems.Storage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.Base.DriveWithJoysticks;
+import frc.robot.commands.Intake.IntakeIn;
 // import frc.robot.commands.Hang.HangStop;
-// import frc.robot.commands.Intake.IntakeStop;
+import frc.robot.commands.Intake.IntakeStop;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,13 +32,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final NeoBase base  = new NeoBase();
+  private final Intake intake = new Intake();
   // private final Hang hang = new Hang();
   // private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
-  // private final Intake intake = new Intake();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
+  private final IntakeStop intakeStop = new IntakeStop(intake);
   // private final HangStop hangStop = new HangStop(hang);
   // private final IntakeStop intakeStop = new IntakeStop(intake);
 
@@ -82,10 +84,34 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     base.setDefaultCommand(driveWithJoysticks);
+    intake.setDefaultCommand(intakeStop);
     // hang.setDefaultCommand(hangStop);
 
     logitech = new Joystick(KLogitechPort);
     xbox = new XboxController(KXboxPort);
+
+       // Logitch Buttons 
+    logitechBtnX = new JoystickButton(logitech, KLogitechButtonX);
+    logitechBtnA = new JoystickButton(logitech, KLogitechButtonA);
+    logitechBtnB = new JoystickButton(logitech, KLogitechButtonB);
+    logitechBtnY = new JoystickButton(logitech, KLogitechButtonY);
+    logitechBtnLB = new JoystickButton(logitech, KLogitechLeftBumper);
+    logitechBtnRB = new JoystickButton(logitech, KLogitechRightBumper);
+    logitechBtnLT = new JoystickButton(logitech, KLogitechLeftTrigger);
+    logitechBtnRT = new JoystickButton(logitech, KLogitechRightTrigger);
+
+    // XBox Buttons
+    xboxBtnA = new JoystickButton(xbox, KXboxButtonA);
+  	xboxBtnB = new JoystickButton(xbox, KXboxButtonB);
+		xboxBtnX = new JoystickButton(xbox, KXboxButtonX);
+		xboxBtnY = new JoystickButton(xbox, KXboxButtonY);
+		xboxBtnLB = new JoystickButton(xbox, KXboxLeftBumper);
+    xboxBtnRB = new JoystickButton(xbox, KXboxRightBumper);
+    xboxBtnSelect = new JoystickButton(xbox, KXboxSelectButton);
+		xboxBtnStrt = new JoystickButton(xbox, KXboxStartButton);
+		xboxBtnLT = new JoystickButton(xbox, KXboxLeftTrigger);
+    xboxBtnRT = new JoystickButton(xbox, KXboxRightTrigger);
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -96,7 +122,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    // xboxBtnA.whileHeld(new IntakeIn(intake));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

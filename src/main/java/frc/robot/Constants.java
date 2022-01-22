@@ -18,16 +18,16 @@ public final class Constants {
     // Motors IDs
     //Base
     // public static final int frontLeftDriveId = 1; 
-    public static final int frontLeftCANifierId = 2; 
-    // public static final int frontLeftSteerId = 8;
-    public static final int frontRightDriveId = 7; 
-    public static final int frontRightCANifierId = 0; 
-    public static final int frontRightSteerId = 5; 
-    // public static final int backLeftDriveId = 6; 
-    public static final int backLeftCANifierId = 10; 
-    // public static final int backLeftSteerId = 3;
-    // public static final int backRightDriveId = 9; 
-    public static final int backRightCANifierId = 12; 
+    // public static final int frontLeftCANifierId = 2; 
+    // // public static final int frontLeftSteerId = 8;
+    // public static final int frontRightDriveId = 7; 
+    // public static final int frontRightCANifierId = 0; 
+    // public static final int frontRightSteerId = 5; 
+    // // public static final int backLeftDriveId = 6; 
+    // public static final int backLeftCANifierId = 10; 
+    // // public static final int backLeftSteerId = 3;
+    // // public static final int backRightDriveId = 9; 
+    // public static final int backRightCANifierId = 12; 
     // public static final int backRightSteerId = 4;
 
     //Storage

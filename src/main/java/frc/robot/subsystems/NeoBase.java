@@ -68,13 +68,13 @@ public class NeoBase extends SubsystemBase {
       )
     );
 
-  modules = new ServeX[] {
+  // modules = new ServeX[] {
     
     // new ServeX(new CANSparkMax(frontLeftDriveId, MotorType.kBrushless), new CANSparkMax(frontLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontLeftCANifierId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
-    new ServeX(new CANSparkMax(frontRightDriveId, MotorType.kBrushless), new CANSparkMax(frontRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontRightCANifierId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
+    // new ServeX(new CANSparkMax(frontRightDriveId, MotorType.kBrushless), new CANSparkMax(frontRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(frontRightCANifierId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
     // new ServeX(new CANSparkMax(backLeftDriveId, MotorType.kBrushless), new CANSparkMax(backLeftSteerId, MotorType.kBrushless), new DutyCycleEncoder(backLeftCANifierId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
     // new ServeX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(backRightCANifierId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
-  };
+  // };
 
   SmartDashboard.putNumber("Base kP", 0.0);
   SmartDashboard.putNumber("Base kI", 0.0);
@@ -117,9 +117,9 @@ public class NeoBase extends SubsystemBase {
   //   module.setDesiredState(state);
   // }
 
-  ServeX module = modules[0];
-  SwerveModuleState state = states[0];
-  module.setDesiredState(state);
+  // ServeX module = modules[0];
+  // SwerveModuleState state = states[0];
+  // module.setDesiredState(state);
 
 
     //SmartDashboard.putNumber("gyro Angle", gyro.getAngle());
@@ -131,7 +131,7 @@ public class NeoBase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Rght Front Absolute Angle", modules[0].getAbsoluteTicks());
+    // SmartDashboard.putNumber("Rght Front Absolute Angle", modules[0].getAbsoluteTicks());
 
     // setModuleGains(SmartDashboard.getNumber("Base kP", 0.0), SmartDashboard.getNumber("Base kI", 0.0), SmartDashboard.getNumber("Base kD", 0.0));
     // This method will be called once per scheduler run

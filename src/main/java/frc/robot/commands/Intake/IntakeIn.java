@@ -4,15 +4,15 @@
 
 package frc.robot.commands.Intake;
 
-import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeStop extends CommandBase {
-  /** Creates a new IntakeStop. */
+public class IntakeIn extends CommandBase {
+  /** Creates a new IntakeIn. */
   private final Intake intake;
 
-  public IntakeStop(Intake intake) {
+  public IntakeIn(Intake intake) {
     this.intake = intake;
     addRequirements(intake);
   }
@@ -24,7 +24,7 @@ public class IntakeStop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.move(0);
+    intake.move(Constants.KIntakePWM);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +34,6 @@ public class IntakeStop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
