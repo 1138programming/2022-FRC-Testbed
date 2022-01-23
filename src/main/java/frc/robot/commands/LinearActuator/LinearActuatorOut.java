@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class LinearActuatorOut extends CommandBase {
   private final LinearActuator linearActuator;
+  private double position;
 
   /** Creates a new LinearActuator. */
   public LinearActuatorOut(LinearActuator linearActuator) {
@@ -27,7 +28,13 @@ public class LinearActuatorOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    linearActuator.move(0);
+    if (Robot.robotContainer.xboxBtnA.get()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             AAbbb ) {
+      position = 1;
+    }
+    else if (Robot.robotContainer.xboxBtnB.get()) {
+      position = 0.75;
+    }
+    linearActuator.move(position);
   }
 
   // Called once the command ends or is interrupted.
