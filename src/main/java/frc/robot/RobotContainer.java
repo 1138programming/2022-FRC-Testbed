@@ -32,14 +32,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final NeoBase base  = new NeoBase();
-  private final Intake intake = new Intake();
+  // private final Intake intake = new Intake();
   // private final Hang hang = new Hang();
   // private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
-  private final IntakeStop intakeStop = new IntakeStop(intake);
+  // private final IntakeStop intakeStop = new IntakeStop(intake);
   // private final HangStop hangStop = new HangStop(hang);
   // private final IntakeStop intakeStop = new IntakeStop(intake);
 
@@ -84,7 +84,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     base.setDefaultCommand(driveWithJoysticks);
-    intake.setDefaultCommand(intakeStop);
+    // intake.setDefaultCommand(intakeStop);
     // hang.setDefaultCommand(hangStop);
 
     logitech = new Joystick(KLogitechPort);

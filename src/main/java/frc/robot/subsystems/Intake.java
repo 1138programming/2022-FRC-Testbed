@@ -15,10 +15,10 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
     // intakeMotor = new CANSparkMax(KIntakeSpark, MotorType.kBrushless);
-    intakeMotor = new TalonSRX(11);  //for proto testing
+    // intakeMotor = new TalonSRX(11);  //for proto testing
   }
 
   public void move(double speed) {
-    intakeMotor.set(ControlMode.PercentOutput, speed);
+    // intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 }

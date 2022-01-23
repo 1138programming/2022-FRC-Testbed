@@ -9,10 +9,10 @@ public class Storage {
   private CANSparkMax storageMotor;
     
   public Storage(){
-    storageMotor = new CANSparkMax(KStorageSpark, MotorType.kBrushless);
+    // storageMotor = new CANSparkMax(KStorageSpark, MotorType.kBrushless);
   }
 
   public void move(double speed) {
-    storageMotor.set(speed);
+    // storageMotor.set(speed);
   }
 }

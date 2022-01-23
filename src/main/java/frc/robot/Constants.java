@@ -17,32 +17,32 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     // Motors IDs
     //Base
-    // public static final int frontLeftDriveId = 1; 
-    // public static final int frontLeftCANifierId = 2; 
-    // // public static final int frontLeftSteerId = 8;
-    // public static final int frontRightDriveId = 7; 
-    // public static final int frontRightCANifierId = 0; 
-    // public static final int frontRightSteerId = 5; 
-    // // public static final int backLeftDriveId = 6; 
-    // public static final int backLeftCANifierId = 10; 
-    // // public static final int backLeftSteerId = 3;
-    // // public static final int backRightDriveId = 9; 
-    // public static final int backRightCANifierId = 12; 
-    // public static final int backRightSteerId = 4;
+    public static final int frontLeftDriveId = 3; 
+    public static final int frontLeftMagEncoderId = 1; 
+    public static final int frontLeftSteerId = 4;
+    public static final int frontRightDriveId = 1; 
+    public static final int frontRightMagEncoderId = 0; 
+    public static final int frontRightSteerId = 2; 
+    public static final int backLeftDriveId = 5; 
+    public static final int backLeftMagEncoderId = 2; 
+    public static final int backLeftSteerId = 6;
+    public static final int backRightDriveId = 7; 
+    public static final int backRightMagEncoderId = 3; 
+    public static final int backRightSteerId = 8;
 
     //Storage
-    public static final int KStorageSpark = 18;
+    // public static final int KStorageSpark = 18;
 
     //Shooter
-    public static final int KShooterSpark = 14;
+    // public static final int KShooterSpark = 14;
 
     //Intake
-    public static final int KIntakeSpark = 9;
+    // public static final int KIntakeSpark = 9;
 
     //Hang
-    public static final int KLeftHangMotor = 15;
-    public static final int KRightHangMotor = 17;
-    public static final int KMiddleHangMotor = 19;
+    // public static final int KLeftHangMotor = 15;
+    // public static final int KRightHangMotor = 17;
+    // public static final int KMiddleHangMotor = 19;
 
 // Default PWM Values
 
@@ -52,7 +52,7 @@ public final class Constants {
 //Base Constants
     public static final double kMaxSpeed = Units.feetToMeters(13.6) / 100; // 20 feet per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-    public static final double ticksPerRevolution = 4096;
+    public static final double kticksPerRevolution = 4096;
     public static double feildCalibration = 0;
     public static double frontLeftOffset = 0;
     public static double frontRightOffset = 0;

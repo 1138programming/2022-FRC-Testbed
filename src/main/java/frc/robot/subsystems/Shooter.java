@@ -9,10 +9,10 @@ public class Shooter {
   private CANSparkMax shooterMotor;
 
   public Shooter() {
-    shooterMotor = new CANSparkMax(KShooterSpark, MotorType.kBrushless);
+    // shooterMotor = new CANSparkMax(KShooterSpark, MotorType.kBrushless);
   }
 
   public void move(double speed) {
-    shooterMotor.set(speed);
+    // shooterMotor.set(speed);
   }
 }

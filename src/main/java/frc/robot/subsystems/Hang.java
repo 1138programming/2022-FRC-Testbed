@@ -17,14 +17,14 @@ public class Hang extends SubsystemBase {
   private CANSparkMax middleHangMotor;
 
   public Hang() {
-    leftHangMotor = new CANSparkMax(KLeftHangMotor, MotorType.kBrushless);
-    rightHangMotor = new CANSparkMax(KRightHangMotor, MotorType.kBrushless);
-    middleHangMotor = new CANSparkMax(KMiddleHangMotor, MotorType.kBrushless);
+    // leftHangMotor = new CANSparkMax(KLeftHangMotor, MotorType.kBrushless);
+    // rightHangMotor = new CANSparkMax(KRightHangMotor, MotorType.kBrushless);
+    // middleHangMotor = new CANSparkMax(KMiddleHangMotor, MotorType.kBrushless);
   }
   public void move(double leftMotorSpeed, double rightMotorSpeed, double middleMotorSpeed){
-    leftHangMotor.set(leftMotorSpeed);
-    rightHangMotor.set(rightMotorSpeed);
-    middleHangMotor.set(middleMotorSpeed);
+    // leftHangMotor.set(leftMotorSpeed);
+    // rightHangMotor.set(rightMotorSpeed);
+    // middleHangMotor.set(middleMotorSpeed);
   }
 
 
