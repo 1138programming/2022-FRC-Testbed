@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 
 // Subsystems:
 import frc.robot.subsystems.NeoBase;
@@ -46,15 +44,13 @@ import frc.robot.commands.LinearActuator.LinearActuatorOut;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
   // private final NeoBase base  = new NeoBase();
   private final Intake intake = new Intake();
   private final LinearActuator linearActuator = new LinearActuator();
   // private final Hang hang = new Hang();
   private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
 
@@ -150,7 +146,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 
   public double getLogiRightYAxis() {
