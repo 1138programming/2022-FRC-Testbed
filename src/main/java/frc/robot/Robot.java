@@ -7,9 +7,9 @@ package frc.robot;
 import frc.robot.subsystems.LinearActuator;
 import frc.robot.subsystems.NeoBase;
 // import frc.robot.subsystems.Hang;
-// import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Storage;
-// import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -27,12 +27,12 @@ public class Robot extends TimedRobot {
 
   public static RobotContainer robotContainer;
 
-  public static NeoBase base;
+  // public static NeoBase base;
   public static LinearActuator linearActuator;
   // public static Hang hang;
-  // public static Shooter shooter;
+  public static Shooter shooter;
   // public static Storage storage;
-  // public static Intake intake;
+  public static Intake intake;
 
   /**
    * This function is run when the robot is first started up and should be used for any

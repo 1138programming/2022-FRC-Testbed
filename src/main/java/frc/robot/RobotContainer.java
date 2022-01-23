@@ -10,17 +10,32 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+
+// Subsystems:
 import frc.robot.subsystems.NeoBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearActuator;
 import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
+// Commands
 import frc.robot.commands.Base.DriveWithJoysticks;
-// import frc.robot.commands.Hang.HangStop;
-// import frc.robot.commands.Intake.IntakeStop;
+
+import frc.robot.commands.Intake.IntakeStop;
+import frc.robot.commands.Intake.IntakeIn;
+import frc.robot.commands.Intake.IntakeOut;
+
+import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.Shooter.ShooterStop;
+
+import frc.robot.commands.Storage.StorageStop;
+
+import frc.robot.commands.Hang.HangStop;
+
 import frc.robot.commands.LinearActuator.LinearActuatorOut;
 
 /**
@@ -32,21 +47,32 @@ import frc.robot.commands.LinearActuator.LinearActuatorOut;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final NeoBase base  = new NeoBase();
+  // private final NeoBase base  = new NeoBase();
+  private final Intake intake = new Intake();
   private final LinearActuator linearActuator = new LinearActuator();
   // private final Hang hang = new Hang();
-  // private final Shooter shooter = new Shooter();
+  private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
-  // private final Intake intake = new Intake();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
-  private final LinearActuatorOut linearActuatorOut = new LinearActuatorOut(linearActuator);
+
+  // private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
+
+  private final IntakeIn intakeIn = new IntakeIn(intake);
+  private final IntakeOut intakeOut = new IntakeOut(intake);
+  private final IntakeStop intakeStop = new IntakeStop(intake);
+
+  private final Shoot shoot = new Shoot(shooter);
+  private final ShooterStop shooterStop = new ShooterStop(shooter);
+
   // private final HangStop hangStop = new HangStop(hang);
-  // private final IntakeStop intakeStop = new IntakeStop(intake);
+
+  // private final StorageStop storageStop= new StorageStop(storage);
+
+  private final LinearActuatorOut linearActuatorOut = new LinearActuatorOut(linearActuator);
 
   private static final int KLogitechPort = 0;
-  private static final int KXboxPort = 1;  
+  private static final int KXboxPort = 0;  
 
   //Deadzone
   private static final double KDeadZone = 0.05;
@@ -85,12 +111,22 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    base.setDefaultCommand(driveWithJoysticks);
+    // base.setDefaultCommand(driveWithJoysticks);
     linearActuator.setDefaultCommand(linearActuatorOut);
+    intake.setDefaultCommand(intakeStop);
+    // hang.setDefaultCommand(hangStop);
+    shooter.setDefaultCommand(shooterStop);
     // hang.setDefaultCommand(hangStop);
 
     logitech = new Joystick(KLogitechPort);
     xbox = new XboxController(KXboxPort);
+    xboxBtnA = new JoystickButton(xbox, 1);
+    xboxBtnB = new JoystickButton(xbox, 2);
+    xboxBtnX = new JoystickButton(xbox, 3);
+    xboxBtnY = new JoystickButton(xbox, 4);
+    xboxBtnLB = new JoystickButton(xbox, 5);
+    xboxBtnRB = new JoystickButton(xbox, 6);
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -101,7 +137,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    xboxBtnLB.whenHeld(shoot);
+    xboxBtnX.whenHeld(intakeIn);
+    xboxBtnY.whenHeld(intakeOut);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

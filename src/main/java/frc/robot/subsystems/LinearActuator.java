@@ -13,7 +13,7 @@ public class LinearActuator extends SubsystemBase {
 
 
   public LinearActuator() {
-    linearActuator = new Servo(KLinearActuator);
+    linearActuator = new Servo(5);
     linearActuator.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
   }
 

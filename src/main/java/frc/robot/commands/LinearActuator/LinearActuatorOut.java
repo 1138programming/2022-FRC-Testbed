@@ -16,6 +16,7 @@ public class LinearActuatorOut extends CommandBase {
   /** Creates a new LinearActuator. */
   public LinearActuatorOut(LinearActuator linearActuator) {
     this.linearActuator = linearActuator;
+    position = 1;
 
     addRequirements(linearActuator);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,7 +29,7 @@ public class LinearActuatorOut extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Robot.robotContainer.xboxBtnA.get()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             AAbbb ) {
+    if (Robot.robotContainer.xboxBtnA.get())  {
       position = 1;
     }
     else if (Robot.robotContainer.xboxBtnB.get()) {
