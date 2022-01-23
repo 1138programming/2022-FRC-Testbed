@@ -49,7 +49,7 @@ public class DriveWithJoysticks extends CommandBase {
 
     rot = rotLimiter.calculate(Robot.robotContainer.getLogiRightXAxis());
     
-    base.drive(xSpeed, ySpeed, rot, true);
+    base.drive(xSpeed, ySpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.
