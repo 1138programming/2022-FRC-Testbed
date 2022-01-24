@@ -58,12 +58,6 @@ public final class Constants {
     public static double frontRightOffset = 0;
     public static double backLeftOffset = 0;
     public static double backRightOffset = 0;
-    public static double kDriveP = 1;
-    public static double kDriveI = 0;
-    public static double kDriveD = 0;
-    public static double kAngleP = 1;
-    public static double kAngleI = 0;
-    public static double kAngleD = 0;
 
     public static final int KLinearActuator = 5;
 }

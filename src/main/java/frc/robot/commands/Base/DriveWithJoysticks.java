@@ -7,14 +7,15 @@ package frc.robot.commands.Base;
 import frc.robot.Robot;
 import frc.robot.subsystems.NeoBase;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoysticks extends CommandBase {
 
   private final NeoBase base;
 
-  private double xSpeed;
-  private double ySpeed;
+  private double fbSpeed; //Speed of the robot in the x direction (forward).
+  private double lrSpeed; //Speed of the robot in the Y direction (sideways).
   private double rot;
 
   private SlewRateLimiter xSpeedLimiter;
@@ -26,9 +27,9 @@ public class DriveWithJoysticks extends CommandBase {
 
     this.base = base;
   
-    xSpeedLimiter = new SlewRateLimiter(6);
-    ySpeedLimiter = new SlewRateLimiter(6);
-    rotLimiter = new SlewRateLimiter(6);
+    xSpeedLimiter = new SlewRateLimiter(4);
+    ySpeedLimiter = new SlewRateLimiter(4);
+    rotLimiter = new SlewRateLimiter(4);
 
     addRequirements(base);
   }
@@ -43,13 +44,14 @@ public class DriveWithJoysticks extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    xSpeed = xSpeedLimiter.calculate(Robot.robotContainer.getLogiLeftXAxis());
+    SmartDashboard.putNumber("leftX", Robot.robotContainer.getLogiLeftXAxis());
+    fbSpeed = xSpeedLimiter.calculate(Robot.robotContainer.getLogiLeftYAxis());
 
-    ySpeed = ySpeedLimiter.calculate(Robot.robotContainer.getLogiLeftYAxis());
+    lrSpeed = ySpeedLimiter.calculate(Robot.robotContainer.getLogiLeftXAxis());
 
     rot = rotLimiter.calculate(Robot.robotContainer.getLogiRightXAxis());
     
-    base.drive(xSpeed, ySpeed, rot, false);
+    base.drive(fbSpeed, lrSpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.

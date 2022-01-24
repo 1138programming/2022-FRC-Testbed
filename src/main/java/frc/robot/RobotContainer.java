@@ -145,7 +145,7 @@ public class RobotContainer {
   }
 
   public double getLogiLeftYAxis() {
-    final double Y = logitech.getRawAxis(KLeftYAxis);
+    final double Y = logitech.getY();
     if(Y > KDeadZone || Y < -KDeadZone)
       return -Y;
     else 
@@ -153,7 +153,7 @@ public class RobotContainer {
   }
 
   public double getLogiRightXAxis() {
-    double X = logitech.getRawAxis(KRightXAxis);
+    double X = logitech.getZ();
     if (X > KDeadZone || X < -KDeadZone) {
       return -X;
     } else {
@@ -162,7 +162,7 @@ public class RobotContainer {
   }
 
   public double getLogiLeftXAxis() {
-    double X = logitech.getRawAxis(KLeftXAxis);
+    double X = logitech.getX();
     if (X > KDeadZone || X < -KDeadZone) {
       return -X;
     } else {
