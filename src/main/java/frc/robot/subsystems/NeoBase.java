@@ -97,7 +97,7 @@ public class NeoBase extends SubsystemBase {
       fieldRelative
         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(-gyro.getAngle()))
         : new ChassisSpeeds(xSpeed, ySpeed, rot));
-  SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeed);
+  SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxMotorOutput);
   
   //setting module states, aka moving the motors
 //   for (int i = 0; i < states.length; i++) {
@@ -106,8 +106,8 @@ public class NeoBase extends SubsystemBase {
 //     module.setDesiredState(state);
 //   }
 
-SwerveX module = modules[1];
-SwerveModuleState state = states[1];
+SwerveX module = modules[0];
+SwerveModuleState state = states[0];
 module.setDesiredState(state);
 }
 
@@ -149,8 +149,8 @@ module.setDesiredState(state);
     public double kDriveMotorGearRatio = 1 / 6.55;
     public double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     public double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-    private double kMotorShaftToWheelRatio = 1 / 10.285714; //1/(72/7)
-    private double kAngleEncoderRot2Deg = kMotorShaftToWheelRatio * 360;
+    private double kAngleMotorShaftToWheelRatio = 1 / 10.285714; //1/(72/7)
+    private double kAngleEncoderRot2Deg = kAngleMotorShaftToWheelRatio * 360;
     private double kMagEncoderPeriod = 0.04;
 
     private SwerveModuleState m_desiredState; //for testing
@@ -260,41 +260,40 @@ module.setDesiredState(state);
      */
     public void setDesiredState(SwerveModuleState desiredState) {
 
-    Rotation2d angleR2D = getAngleR2D();
-    // if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
-    //   angleMotor.set(0);
-    //   driveMotor.set(0);
-    //   return;
-    // }
+    Rotation2d currentAngleR2D = getAngleR2D();
+    if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+      angleMotor.set(0);
+      driveMotor.set(0);
+      return;
+    }
     
-    // // Find the difference between our current rotational position and our new rotational position
-    Rotation2d rotationDelta = desiredState.angle.minus(angleR2D);
+    //Find the difference between our current rotational position and our new rotational position
+    Rotation2d rotationDelta = desiredState.angle.minus(currentAngleR2D);
 
-    // // Find the new absolute position of the module based on the difference in degrees
+    //Find the new absolute position of the module based on the difference in degrees
     double deltaDeg = rotationDelta.getDegrees();
 
-     if (Math.abs(deltaDeg) < 5) {
+    if (Math.abs(deltaDeg) < 5) {
        angleMotorOutput = 0;
       }
-      else {
+    else {
       angleMotorOutput = angleController.calculate(getAngleEncoderDeg(), desiredState.angle.getDegrees());
     }
 
     SmartDashboard.putNumber("angle PID Output", angleMotorOutput);
   
     SmartDashboard.putNumber("state angle deg", desiredState.angle.getDegrees());
-    SmartDashboard.putNumber("current angle deg", angleR2D.getDegrees());
+    SmartDashboard.putNumber("current angle deg", currentAngleR2D.getDegrees());
     SmartDashboard.putNumber("deltaDeg", deltaDeg);
     SmartDashboard.putNumber("rel angle", getAngleEncoderDeg());
 
     //comment out so robot doesn't explode
     angleMotor.set(angleMotorOutput);
 
-    double feetPerSecond = Units.metersToFeet(desiredState.speedMetersPerSecond)/2;
-
+    SmartDashboard.putNumber("drive output", desiredState.speedMetersPerSecond);
+    SmartDashboard.putString("desiredState", desiredState.toString());
     //comment out so robot doesn't explode 
-    driveMotor.set(0.6 * feetPerSecond / kMaxSpeed); // Motor smoky, check
-    // driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond / kMaxSpeed));
+    driveMotor.set(desiredState.speedMetersPerSecond); // Motor smoky, check
     }
 
   }

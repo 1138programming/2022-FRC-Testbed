@@ -50,7 +50,8 @@ public final class Constants {
     public static final double KIntakePWM = 1;
 
 //Base Constants
-    public static final double kMaxSpeed = Units.feetToMeters(13.6) / 100; // 20 feet per second
+    public static final double kMaxSpeed = 6.09; // 20 feet per second
+    public static final double kMaxMotorOutput = 1.0;
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
     public static final double kticksPerRevolution = 4096;
     public static double feildCalibration = 0;
