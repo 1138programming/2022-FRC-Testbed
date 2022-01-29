@@ -41,10 +41,10 @@ public class NeoBase extends SubsystemBase {
 
   // private double[] KAbsoluteResetPoints = {3192, 3823, 3220, 2280};
   //offset of each module, in degrees
-  private double frontLeftOffset = ((kticksPerRevolution - 3192) / kticksPerRevolution) * 360;
-  private double frontRightOffset = ((kticksPerRevolution - 3823) / kticksPerRevolution) * 360;
-  private double backLeftOffset = ((kticksPerRevolution - 3220) / kticksPerRevolution) * 360;
-  private double backRightOffset = ((kticksPerRevolution - 2280) / kticksPerRevolution) * 360;
+  private double frontLeftOffset = 178.5;
+  private double frontRightOffset = 333.5;
+  private double backLeftOffset = 282.8; 
+  private double backRightOffset = 12.6;
 
   public NeoBase() {
 
@@ -76,10 +76,9 @@ public class NeoBase extends SubsystemBase {
     new SwerveX(new CANSparkMax(backRightDriveId, MotorType.kBrushless), new CANSparkMax(backRightSteerId, MotorType.kBrushless), new DutyCycleEncoder(backRightMagEncoderId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
   };
 
-  SmartDashboard.putNumber("Base Angle kP", 0.0);
-  SmartDashboard.putNumber("Base Angle kI", 0.0);
-  SmartDashboard.putNumber("Base Angle kD", 0.0);
-  
+  SmartDashboard.putNumber("Base Drive kP", 0.0);
+  SmartDashboard.putNumber("Base Drive kI", 0.0);
+  SmartDashboard.putNumber("Base Drive kD", 0.0);
   // gyro.reset(); 
   }
 
@@ -101,17 +100,16 @@ public class NeoBase extends SubsystemBase {
   SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeed);
   
   //setting module states, aka moving the motors
-  // for (int i = 0; i < states.length; i++) {
-  //   SwerveX module = modules[i];
-  //   SwerveModuleState state = states[i];
-  //   module.setDesiredState(state);
-  // }
+//   for (int i = 0; i < states.length; i++) {
+//     SwerveX module = modules[i];
+//     SwerveModuleState state = states[i];
+//     module.setDesiredState(state);
+//   }
 
-  SwerveX module = modules[0];
-  SwerveModuleState state = states[0];
-  module.setDesiredState(state);
-
-  }
+SwerveX module = modules[1];
+SwerveModuleState state = states[1];
+module.setDesiredState(state);
+}
 
   // public void resetGyro() {
   //   gyro.reset(); //recalibrates gyro offset
@@ -119,22 +117,20 @@ public class NeoBase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Front Deg Angle", modules[0].getAngleDeg());
-    SmartDashboard.putNumber("Left Front Absolute Angle", modules[0].getAbsoluteTicks());
-    // SmartDashboard.putNumber("Rght Front Absolute Angle", modules[1].getAbsoluteTicks());
-    // SmartDashboard.putNumber("Left Back Absolute Angle", modules[2].getAbsoluteTicks());
-    // SmartDashboard.putNumber("Rght Back Absolute Angle", modules[3].getAbsoluteTicks());
-    SmartDashboard.putNumber("Left Front Raw Encoder", modules[0].getRawAbsoluteTicks());
+    // SmartDashboard.putNumber("Left Front Deg Angle", modules[0].getAngleDeg());
+    SmartDashboard.putNumber("Front Left Absolute Angle", modules[0].getAngleDeg());
+    SmartDashboard.putNumber("DriveVel", modules[0].getDriveEncoderVel());
+    // SmartDashboard.putNumber("Left Front Raw Encoder", modules[0].getRawAbsoluteTicks());
     // SmartDashboard.putNumber("Right Front Rel Angle", modules[1].getAngleTicks());
     // SmartDashboard.putNumber("Left Back Rel Angle", modules[2].getAngleTicks());
     // SmartDashboard.putNumber("Right Back Rel Angle", modules[3].getAngleTicks());
 
-    setModuleGains(SmartDashboard.getNumber("Base Angle kP", 0.0), SmartDashboard.getNumber("Base Angle kI", 0.0), SmartDashboard.getNumber("Base Angle kD", 0.0));
+    setModuleGains(SmartDashboard.getNumber("Base Drive kP", 0.0), SmartDashboard.getNumber("Base Drive kI", 0.0), SmartDashboard.getNumber("Base Drive kD", 0.0));
     // This method will be called once per scheduler run
   }
 
   public void setModuleGains(double kP, double kI, double kD){
-    modules[0].setAnglePIDGains(kP, kI, kD);
+    // modules[0].setDrivePIDGains(kP, kI, kD);
   }
 
   @Override
@@ -144,14 +140,17 @@ public class NeoBase extends SubsystemBase {
 
   class SwerveX {
 
-    private final Gains kDriveGains = new Gains(15, 0.01, 0.1, 0.2);
+    private final Gains kDriveGains = new Gains(0.1, 0.00, 0, 0.2);
 
     private final Gains kAngleGains = new Gains(0.006, 0.0, 0.0, 0.0); 
 
     private double kEncoderTicksPerRotation = 4096;
+    public double kWheelDiameterMeters = Units.inchesToMeters(4);
+    public double kDriveMotorGearRatio = 1 / 6.55;
+    public double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+    public double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     private double kMotorShaftToWheelRatio = 1 / 10.285714; //1/(72/7)
     private double kAngleEncoderRot2Deg = kMotorShaftToWheelRatio * 360;
-    // public double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     private double kMagEncoderPeriod = 0.04;
 
     private SwerveModuleState m_desiredState; //for testing
@@ -166,84 +165,35 @@ public class NeoBase extends SubsystemBase {
     private double[] pulseWidthAndPeriod = new double[]{1, 1/244}; //pulse width found in mag encoder manual pdf, period is 1/frequency (also found in pdf)
 
     private double angleMotorOutput;
-
+    
     SwerveX(CANSparkMax driveMotor, CANSparkMax angleMotor, DutyCycleEncoder magEncoder, Rotation2d offset) {
       this.driveMotor = driveMotor;
       this.angleMotor = angleMotor;
       this.magEncoder = magEncoder;
       this.offset = offset;
-
+      
       //PIDControllers:
       driveController = new PIDController(kDriveGains.kP, kDriveGains.kI, kDriveGains.kD);
       angleController = new PIDController(kAngleGains.kP, kAngleGains.kI, kAngleGains.kD);
-
+      
       //telling the pid controller that 360 deg in one direction is the same as 360 deg in the other direction
       angleController.enableContinuousInput(-180, 180);
-
+      
       angleMotor.setIdleMode(IdleMode.kCoast);
-      driveMotor.setIdleMode(IdleMode.kBrake);
-
+      driveMotor.setIdleMode(IdleMode.kCoast);
+      
       driveEncoder = driveMotor.getEncoder();
       angleEncoder = angleMotor.getEncoder();
-
-      // driveEncoder.setPositionConversionFactor(kDriveEncoderRot2Meter);
+      
+      driveEncoder.setPositionConversionFactor(kDriveEncoderRot2Meter);
       angleEncoder.setPositionConversionFactor(kAngleEncoderRot2Deg);
-
+      
       resetRelEncoders();
     }
-
-    public double getDriveEncoderPos() {
-      return driveEncoder.getPosition();
-    }
-
-    public double getAngleEncoderDeg() {
-      return angleEncoder.getPosition();
-    }
-
+    
     public void resetRelEncoders() {
         driveEncoder.setPosition(0);
         angleEncoder.setPosition(getAngleDeg());
-    }
-
-    //encoder get functions
-    public Rotation2d getAngleR2D() {
-      return Rotation2d.fromDegrees(getAngleEncoderDeg()); 
-    }
-    public double getAngleDeg() {
-      double angle = (getAbsoluteTicks() / kticksPerRevolution) * 360;
-      return angle;
-    }
-    // public double getRawAbsoluteTicks(){
-    //   double magEncoderAbsValue = magEncoder.get();
-    //   if (magEncoderAbsValue < 0)
-    //   {
-    //     magEncoderAbsValue = kticksPerRevolution + (magEncoder.get() % 1 ) * kticksPerRevolution;
-    //   }
-    //   else {
-    //     magEncoderAbsValue = (magEncoder.get() % 1) * kticksPerRevolution;
-    //   }
-    //   return magEncoderAbsValue;
-    // }
-    public double getRawAbsoluteTicks(){
-      return magEncoder.get();
-    }
-
-    public double getAbsoluteTicks(){
-      double magEncoderAbsValue = magEncoder.get();
-      if (magEncoderAbsValue < 0)
-      {
-        magEncoderAbsValue = kticksPerRevolution + (magEncoder.get() % 1 ) * kticksPerRevolution;
-      }
-      else {
-        magEncoderAbsValue = (magEncoder.get() % 1) * kticksPerRevolution;
-      }
-
-      double adjustedTicks = magEncoderAbsValue + r2dToTicks(offset);
-
-      if (adjustedTicks > kticksPerRevolution) {
-        adjustedTicks = adjustedTicks % kticksPerRevolution;
-      }
-      return adjustedTicks;
     }
 
     //conversion functions
@@ -259,6 +209,49 @@ public class NeoBase extends SubsystemBase {
     public double r2dToTicks(Rotation2d r2d) {
       return (r2d.getDegrees() / 360) * kticksPerRevolution;
     }
+    
+    //encoder get functions
+    public double getDriveEncoderPos() {
+      return driveEncoder.getPosition();
+    }
+
+    public double getDriveEncoderVel() {
+      return driveEncoder.getVelocity();
+    }
+
+    public double getAngleEncoderDeg() {
+      return angleEncoder.getPosition();
+    }
+    
+    public Rotation2d getAngleR2D() {
+      return Rotation2d.fromDegrees(getAngleEncoderDeg()); 
+    }
+    public double getAngleDeg() {
+      double angle = (getAbsoluteTicks() / kticksPerRevolution) * 360;
+      return angle;
+    }
+
+    public double getRawAbsoluteTicks(){
+      return magEncoder.get();
+    }
+
+    public double getAbsoluteTicks(){
+      double magEncoderAbsValue = magEncoder.get();
+      if (magEncoderAbsValue < 0)
+      {
+        magEncoderAbsValue = kticksPerRevolution + (magEncoder.get() % 1 ) * kticksPerRevolution;
+      }
+      else {
+        magEncoderAbsValue = (magEncoder.get() % 1) * kticksPerRevolution;
+      }
+      double adjustedTicks = magEncoderAbsValue - r2dToTicks(offset);
+
+      if (adjustedTicks > kticksPerRevolution) {
+        adjustedTicks = adjustedTicks % kticksPerRevolution;
+      }
+      return adjustedTicks;
+    }
+
 
     //:)
     /**
@@ -268,12 +261,11 @@ public class NeoBase extends SubsystemBase {
     public void setDesiredState(SwerveModuleState desiredState) {
 
     Rotation2d angleR2D = getAngleR2D();
-    // desiredState = SwerveModuleState.optimize(desiredState, angleR2D);
-    if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
-      angleMotor.set(0);
-      driveMotor.set(0);
-      return;
-    }
+    // if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+    //   angleMotor.set(0);
+    //   driveMotor.set(0);
+    //   return;
+    // }
     
     // // Find the difference between our current rotational position and our new rotational position
     Rotation2d rotationDelta = desiredState.angle.minus(angleR2D);
@@ -281,21 +273,12 @@ public class NeoBase extends SubsystemBase {
     // // Find the new absolute position of the module based on the difference in degrees
     double deltaDeg = rotationDelta.getDegrees();
 
-    // if (Math.abs(deltaDeg) < 5) {
-    //   deltaDeg = 0;
-    // }
-
      if (Math.abs(deltaDeg) < 5) {
        angleMotorOutput = 0;
       }
       else {
       angleMotorOutput = angleController.calculate(getAngleEncoderDeg(), desiredState.angle.getDegrees());
     }
-
-    // Using a PID Controller to calculate motor output for angle motor
-    // angleMotorOutput = angleController.calculate(deltaDeg, 0);
-    // angleMotorOutput = MathUtil.clamp(angleMotorOutput, -1.0, 1.0);
-
 
     SmartDashboard.putNumber("angle PID Output", angleMotorOutput);
   
@@ -309,14 +292,11 @@ public class NeoBase extends SubsystemBase {
 
     double feetPerSecond = Units.metersToFeet(desiredState.speedMetersPerSecond)/2;
 
-    //comment out so robot doesn't explode
-    // driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), feetPerSecond / kMaxSpeed));
+    //comment out so robot doesn't explode 
+    driveMotor.set(0.6 * feetPerSecond / kMaxSpeed); // Motor smoky, check
+    // driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond / kMaxSpeed));
     }
-    
-    public void setAnglePIDGains(double kP, double kI, double kD){
-      angleController.setP(kP);
-      angleController.setI(kI);
-      angleController.setD(kD);
-    }
+
   }
 }
+//Lucia when ur mom
