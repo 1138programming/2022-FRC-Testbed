@@ -27,6 +27,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.MathUtil;
 
@@ -145,10 +146,12 @@ public class NeoBase extends SubsystemBase {
 
     private final Gains kDriveGains = new Gains(15, 0.01, 0.1, 0.2);
 
-    private final Gains kAngleGains = new Gains(0.0005, 0.0, 0.0, 0.0); //oscillating when only using P, oscillates at higher frequency when positive D is added, lower fewquency when negative D is added
+    private final Gains kAngleGains = new Gains(0.006, 0.0, 0.0, 0.0); 
 
     private double kEncoderTicksPerRotation = 4096;
-    private double kMotorShaftToWheelRatio = 72/7;
+    private double kMotorShaftToWheelRatio = 1 / 10.285714; //1/(72/7)
+    private double kAngleEncoderRot2Deg = kMotorShaftToWheelRatio * 360;
+    // public double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     private double kMagEncoderPeriod = 0.04;
 
     private SwerveModuleState m_desiredState; //for testing
@@ -156,6 +159,8 @@ public class NeoBase extends SubsystemBase {
     private CANSparkMax driveMotor;
     private CANSparkMax angleMotor;
     private DutyCycleEncoder magEncoder;
+    private RelativeEncoder driveEncoder;
+    private RelativeEncoder angleEncoder;
     private PIDController driveController, angleController;
     private Rotation2d offset;
     private double[] pulseWidthAndPeriod = new double[]{1, 1/244}; //pulse width found in mag encoder manual pdf, period is 1/frequency (also found in pdf)
@@ -170,19 +175,39 @@ public class NeoBase extends SubsystemBase {
 
       //PIDControllers:
       driveController = new PIDController(kDriveGains.kP, kDriveGains.kI, kDriveGains.kD);
-      angleController = new PIDController(kAngleGains.kP, kAngleGains.kI, kAngleGains.kD, kMagEncoderPeriod); //Mag Encoder period is 4ms, but robot code run period is 2ms!!!
+      angleController = new PIDController(kAngleGains.kP, kAngleGains.kI, kAngleGains.kD);
 
       //telling the pid controller that 360 deg in one direction is the same as 360 deg in the other direction
-      angleController.enableContinuousInput(0, 2*Math.PI);
+      angleController.enableContinuousInput(-180, 180);
 
       angleMotor.setIdleMode(IdleMode.kCoast);
       driveMotor.setIdleMode(IdleMode.kBrake);
+
+      driveEncoder = driveMotor.getEncoder();
+      angleEncoder = angleMotor.getEncoder();
+
+      // driveEncoder.setPositionConversionFactor(kDriveEncoderRot2Meter);
+      angleEncoder.setPositionConversionFactor(kAngleEncoderRot2Deg);
+
+      resetRelEncoders();
+    }
+
+    public double getDriveEncoderPos() {
+      return driveEncoder.getPosition();
+    }
+
+    public double getAngleEncoderDeg() {
+      return angleEncoder.getPosition();
+    }
+
+    public void resetRelEncoders() {
+        driveEncoder.setPosition(0);
+        angleEncoder.setPosition(getAngleDeg());
     }
 
     //encoder get functions
     public Rotation2d getAngleR2D() {
-      double deg = (getAbsoluteTicks() / kticksPerRevolution) * 360; 
-      return Rotation2d.fromDegrees(deg); 
+      return Rotation2d.fromDegrees(getAngleEncoderDeg()); 
     }
     public double getAngleDeg() {
       double angle = (getAbsoluteTicks() / kticksPerRevolution) * 360;
@@ -243,31 +268,46 @@ public class NeoBase extends SubsystemBase {
     public void setDesiredState(SwerveModuleState desiredState) {
 
     Rotation2d angleR2D = getAngleR2D();
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, angleR2D);
-    if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+    // desiredState = SwerveModuleState.optimize(desiredState, angleR2D);
+    if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
       angleMotor.set(0);
       driveMotor.set(0);
       return;
     }
-    SmartDashboard.putNumber("Front Left Desired rad", state.angle.getRadians());
+    
+    // // Find the difference between our current rotational position and our new rotational position
+    Rotation2d rotationDelta = desiredState.angle.minus(angleR2D);
+
+    // // Find the new absolute position of the module based on the difference in degrees
+    double deltaDeg = rotationDelta.getDegrees();
+
+    // if (Math.abs(deltaDeg) < 5) {
+    //   deltaDeg = 0;
+    // }
+
+     if (Math.abs(deltaDeg) < 5) {
+       angleMotorOutput = 0;
+      }
+      else {
+      angleMotorOutput = angleController.calculate(getAngleEncoderDeg(), desiredState.angle.getDegrees());
+    }
 
     // Using a PID Controller to calculate motor output for angle motor
-    angleMotorOutput = angleController.calculate(angleR2D.getRadians(), state.angle.getRadians());
+    // angleMotorOutput = angleController.calculate(deltaDeg, 0);
     // angleMotorOutput = MathUtil.clamp(angleMotorOutput, -1.0, 1.0);
+
 
     SmartDashboard.putNumber("angle PID Output", angleMotorOutput);
   
-    //comment out so robot doesn't explode
-    double error = Math.abs(angleR2D.getRadians() - state.angle.getRadians());
-    if ( error < 0.8 )
-    {
-      angleMotor.set(0);
-    }
-    else{
-      angleMotor.set(angleMotorOutput);
-    }
+    SmartDashboard.putNumber("state angle deg", desiredState.angle.getDegrees());
+    SmartDashboard.putNumber("current angle deg", angleR2D.getDegrees());
+    SmartDashboard.putNumber("deltaDeg", deltaDeg);
+    SmartDashboard.putNumber("rel angle", getAngleEncoderDeg());
 
-    double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond)/2;
+    //comment out so robot doesn't explode
+    angleMotor.set(angleMotorOutput);
+
+    double feetPerSecond = Units.metersToFeet(desiredState.speedMetersPerSecond)/2;
 
     //comment out so robot doesn't explode
     // driveMotor.set(driveController.calculate(driveEncoder.getVelocity(), feetPerSecond / kMaxSpeed));
