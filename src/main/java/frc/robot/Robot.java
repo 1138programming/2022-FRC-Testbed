@@ -4,10 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.LinearActuator;
-// import frc.robot.subsystems.Hang;
+import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Shooter;
-// import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Intake;
 
 
@@ -25,12 +24,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   public static RobotContainer robotContainer;
-
-  public static LinearActuator linearActuator;
-  // public static Hang hang;
-  public static Shooter shooter;
-  // public static Storage storage;
-  public static Intake intake;
 
   /**
    * This function is run when the robot is first started up and should be used for any

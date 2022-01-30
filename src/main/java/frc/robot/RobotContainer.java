@@ -8,35 +8,24 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.NeoBase;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.commands.Base.DriveWithJoysticks;
 
 // Subsystems:
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LinearActuator;
 import frc.robot.subsystems.Hang;
+import frc.robot.subsystems.NeoBase;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-
 // Commands
-
+import frc.robot.commands.Base.DriveWithJoysticks;
 import frc.robot.commands.Intake.IntakeStop;
 import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
-
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.ShooterStop;
-
 import frc.robot.commands.Storage.StorageStop;
-
 import frc.robot.commands.Hang.HangStop;
-
-import frc.robot.commands.LinearActuator.LinearActuatorOut;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,30 +36,23 @@ import frc.robot.commands.LinearActuator.LinearActuatorOut;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final NeoBase base  = new NeoBase();
+  private final Hang hang = new Hang();
+  private final Intake intake = new Intake();
+  private final Shooter shooter = new Shooter();
+  private final Storage storage = new Storage();
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
-
-  private final Intake intake = new Intake();
-  private final LinearActuator linearActuator = new LinearActuator();
-  // private final Hang hang = new Hang();
-  private final Shooter shooter = new Shooter();
-  // private final Storage storage = new Storage();
-
   private final IntakeIn intakeIn = new IntakeIn(intake);
   private final IntakeOut intakeOut = new IntakeOut(intake);
   private final IntakeStop intakeStop = new IntakeStop(intake);
-
   private final Shoot shoot = new Shoot(shooter);
   private final ShooterStop shooterStop = new ShooterStop(shooter);
+  private final HangStop hangStop = new HangStop(hang);
+  private final StorageStop storageStop= new StorageStop(storage);
 
-  // private final HangStop hangStop = new HangStop(hang);
-
-  // private final StorageStop storageStop= new StorageStop(storage);
-
-  private final LinearActuatorOut linearActuatorOut = new LinearActuatorOut(linearActuator);
-
+  //Controller Ports
   private static final int KLogitechPort = 0;
-  private static final int KXboxPort = 0;  
+  private static final int KXboxPort = 1;  
 
   //Deadzone
   private static final double KDeadZone = 0.05;
@@ -109,12 +91,19 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    base.setDefaultCommand(driveWithJoysticks);
 
+    //Default commands for each subsystem
+    base.setDefaultCommand(driveWithJoysticks);
+    hang.setDefaultCommand(hangStop);
+    intake.setDefaultCommand(intakeStop);
+    shooter.setDefaultCommand(shooterStop);
+    storage.setDefaultCommand(storageStop);
+
+    //Game controllers
     logitech = new Joystick(KLogitechPort);
     xbox = new XboxController(KXboxPort);
 
-       // Logitch Buttons 
+    // Logitch Buttons 
     logitechBtnX = new JoystickButton(logitech, KLogitechButtonX);
     logitechBtnA = new JoystickButton(logitech, KLogitechButtonA);
     logitechBtnB = new JoystickButton(logitech, KLogitechButtonB);

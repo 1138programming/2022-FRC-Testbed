@@ -41,9 +41,9 @@ public final class Constants {
     public static final int KIntakeMotor = 10;
 
     //Hang
-    // public static final int KLeftHangMotor = 15;
-    // public static final int KRightHangMotor = 17;
-    // public static final int KMiddleHangMotor = 19;
+    public static final int KLeftHangMotor = 15;
+    public static final int KRightHangMotor = 17;
+    public static final int KMiddleHangMotor = 19;
 
     public static final int KLeftLinearServo = 1;
     public static final int KMiddleLinearServo = 2;
