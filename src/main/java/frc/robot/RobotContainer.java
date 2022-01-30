@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Subsystems:
-import frc.robot.subsystems.NeoBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearActuator;
 import frc.robot.subsystems.Hang;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 // Commands
-import frc.robot.commands.Base.DriveWithJoysticks;
 
 import frc.robot.commands.Intake.IntakeStop;
 import frc.robot.commands.Intake.IntakeIn;
@@ -45,14 +43,11 @@ import frc.robot.commands.LinearActuator.LinearActuatorOut;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  // private final NeoBase base  = new NeoBase();
   private final Intake intake = new Intake();
   private final LinearActuator linearActuator = new LinearActuator();
   // private final Hang hang = new Hang();
   private final Shooter shooter = new Shooter();
   // private final Storage storage = new Storage();
-
-  // private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
 
   private final IntakeIn intakeIn = new IntakeIn(intake);
   private final IntakeOut intakeOut = new IntakeOut(intake);
@@ -107,7 +102,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // base.setDefaultCommand(driveWithJoysticks);
     linearActuator.setDefaultCommand(linearActuatorOut);
     intake.setDefaultCommand(intakeStop);
     // hang.setDefaultCommand(hangStop);

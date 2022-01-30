@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.subsystems.LinearActuator;
-import frc.robot.subsystems.NeoBase;
 // import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Storage;
@@ -27,7 +26,6 @@ public class Robot extends TimedRobot {
 
   public static RobotContainer robotContainer;
 
-  // public static NeoBase base;
   public static LinearActuator linearActuator;
   // public static Hang hang;
   public static Shooter shooter;
