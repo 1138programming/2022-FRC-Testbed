@@ -31,23 +31,34 @@ public final class Constants {
     public static final int backRightSteerId = 8;
 
     //Storage
-    // public static final int KStorageSpark = 18;
+    public static final int KStorageSpark = 9;
 
     //Shooter
-    // public static final int KShooterSpark = 14;
+    public static final int KLeftShooterMotor = 11;
+    public static final int KRightShooterMotor = 12;
 
     //Intake
-    // public static final int KIntakeSpark = 9;
+    public static final int KIntakeMotor = 10;
 
     //Hang
     // public static final int KLeftHangMotor = 15;
     // public static final int KRightHangMotor = 17;
     // public static final int KMiddleHangMotor = 19;
 
+    public static final int KLeftLinearServo = 1;
+    public static final int KMiddleLinearServo = 2;
+    public static final int KRightLinearServo = 3;
+
 // Default PWM Values
 
     //Intake
-    public static final double KIntakePWM = 1;
+    public static final double KIntakePWM = 1.0;
+
+    // Limelight 
+    public static final double kDesiredYOffset = 1;
+    public static final double kDesiredXOffset = 1;
+    public static final double kYOffsetDeadzone = 10;
+    public static final double kXOffsetDeadzone = 10;
 
 //Base Constants
     public static final double kMaxSpeed = 6.09; // 20 feet per second
