@@ -189,35 +189,24 @@ public class NeoBase extends SubsystemBase {
       //telling the pid controller that 360 deg in one direction is the same as 360 deg in the other direction
       angleController.enableContinuousInput(-180, 180);
       
-      angleMotor.setIdleMode(IdleMode.kCoast);
-      driveMotor.setIdleMode(IdleMode.kCoast);
+      //motor break mode (kBreak or kCoast)
+      angleMotor.setIdleMode(IdleMode.kCoast); //set to coast for testing
+      driveMotor.setIdleMode(IdleMode.kCoast); //set to coast for testing
       
       driveEncoder = driveMotor.getEncoder();
       angleEncoder = angleMotor.getEncoder();
       
+      //set relative encoders' conversion factors so they return readings in meters and degrees
       driveEncoder.setPositionConversionFactor(kDriveEncoderRot2Meter);
+      angleEncoder.setPositionConversionFactor(kAngleEncoderRot2Deg);
     }
     
+    //resets all relative encoders to match absolute encoder value, used in DriveWithJoysticks Command
     public void resetRelEncoders() {
       driveEncoder.setPosition(0);
-      angleEncoder.setPositionConversionFactor(kAngleEncoderRot2Deg);
       angleEncoder.setPosition(getAngleDeg() - offset.getDegrees());
     }
 
-    //conversion functions
-    // public double ticksToDegrees(double ticks) {
-    //   return (ticks / kticksPerRevolution) * 360;
-    // }
-    // public double ticksToRotations(double ticks) {
-    //   return ticks / kticksPerRevolution;
-    // }
-    // public double rotationsToTicks(double rot) {
-    //   return rot * kticksPerRevolution;
-    // }
-    // public double r2dToTicks(Rotation2d r2d) {
-    //   return (r2d.getDegrees() / 360) * kticksPerRevolution;
-    // }
-    
     //encoder get functions
     public double getDriveEncoderPos() {
       return driveEncoder.getPosition();
@@ -265,11 +254,13 @@ public class NeoBase extends SubsystemBase {
     public void setDesiredState(SwerveModuleState desiredState) {
 
     Rotation2d currentAngleR2D = getAngleR2D();
-    // if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
-    //   angleMotor.set(0);
-    //   driveMotor.set(0);
-    //   return;
-    // }
+
+    //if no controller input, stop and exit
+    if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+      angleMotor.set(0);
+      driveMotor.set(0);
+      return;
+    }
     
     //Find the difference between our current rotational position and our new rotational position
     Rotation2d rotationDelta = desiredState.angle.minus(currentAngleR2D);
@@ -287,7 +278,7 @@ public class NeoBase extends SubsystemBase {
     SmartDashboard.putNumber("desired angle deg", desiredState.angle.getDegrees());
     SmartDashboard.putNumber("current rel angle deg", currentAngleR2D.getDegrees());
 
-    //comment out so robot doesn't explode
+    //comment out when testing so robot doesn't explode
     angleMotor.set(angleMotorOutput);
 
     SmartDashboard.putNumber("drive output", desiredState.speedMetersPerSecond);
@@ -296,7 +287,7 @@ public class NeoBase extends SubsystemBase {
     if (isInverted) {
       driveOutput = -driveOutput;
     }
-    //comment out so robot doesn't explode 
+    //comment out when testing so robot doesn't explode 
     driveMotor.set(driveOutput); // Motor smoky, check
     }
   }
