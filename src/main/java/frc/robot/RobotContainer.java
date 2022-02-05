@@ -15,7 +15,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.NeoBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Storage;
 
 // Commands
 import frc.robot.commands.Base.DriveWithJoysticks;
@@ -24,7 +23,6 @@ import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.ShooterStop;
-import frc.robot.commands.Storage.StorageStop;
 import frc.robot.commands.Hang.HangStop;
 
 /**
@@ -39,7 +37,6 @@ public class RobotContainer {
   private final Hang hang = new Hang();
   private final Intake intake = new Intake();
   private final Shooter shooter = new Shooter();
-  private final Storage storage = new Storage();
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(base);
   private final IntakeIn intakeIn = new IntakeIn(intake);
@@ -48,7 +45,6 @@ public class RobotContainer {
   private final Shoot shoot = new Shoot(shooter);
   private final ShooterStop shooterStop = new ShooterStop(shooter);
   private final HangStop hangStop = new HangStop(hang);
-  private final StorageStop storageStop= new StorageStop(storage);
 
   //Controller Ports
   private static final int KLogitechPort = 0;
@@ -97,7 +93,6 @@ public class RobotContainer {
     hang.setDefaultCommand(hangStop);
     intake.setDefaultCommand(intakeStop);
     shooter.setDefaultCommand(shooterStop);
-    storage.setDefaultCommand(storageStop);
 
     //Game controllers
     logitech = new Joystick(KLogitechPort);
